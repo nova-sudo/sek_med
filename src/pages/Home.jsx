@@ -10,6 +10,7 @@ import VitalPage from '../components/VitalPage.jsx';
 import SymptomCheckerPage from '../components/SymptomCheckerPage.jsx';
 
 const Home = () => {
+  const [isDisabled, setIsDisabled] = useState(true); // Example: Initially disabled
   const [activePage, setActivePage] = useState('symptom'); // Track the current active page
   const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Track dropdown visibility
   const currentDate = new Date().toLocaleDateString(); // Current date
@@ -61,11 +62,18 @@ const Home = () => {
               }`}
             />
             <TbActivityHeartbeat
-              onClick={() => setActivePage('vital')}
-              className={`text-4xl m-1 ring-1 ring-gray-200 rounded-full p-2 cursor-pointer ${
-                activePage === 'vital' ? 'bg-red-200' : 'bg-white'
-              }`}
-            />
+  onClick={() => {
+    if (!isDisabled) setActivePage('vital');
+  }}
+  className={`text-4xl m-1 ring-1 ring-gray-200 rounded-full p-2 ${
+    activePage === 'vital' ? 'bg-red-200' : 'bg-white'
+  } ${
+    isDisabled
+      ? 'opacity-50 cursor-not-allowed'
+      : 'cursor-pointer hover:bg-gray-200'
+  }`}
+/>
+
           </div>
         </div>
       </div>
@@ -74,7 +82,7 @@ const Home = () => {
       <div className="flex items-start mx-4 mt-5">
         {/* Main Content */}
         <div className="bg-neutral-200 w-full rounded-3xl px-5">
-          {activePage === 'vital' && <VitalPage />}
+          {activePage === 'vital' && <VitalPage/>}
           {activePage === 'symptom' && <SymptomCheckerPage />}
         </div>
       </div>

@@ -56,7 +56,7 @@ function SymptomCheckerPage() {
     if (!spokenMessagesRef.current.has(text)) {
       spokenMessagesRef.current.add(text); // Mark the message as spoken
       if (window.responsiveVoice) {
-        window.responsiveVoice.speak(text, "UK English Female", { rate: 1 });
+        window.responsiveVoice.speak(text, "UK English Female", { rate: 1.2 });
       } else {
         console.error("ResponsiveVoice is not available.");
       }
@@ -135,7 +135,7 @@ function SymptomCheckerPage() {
   };
 
   return (
-    <div className="md:max-h-[600px] md:z-20 md:min-h-[700px] min-h-[400px] font-pixel font-bold flex flex-col">
+    <div className="md:max-h-[600px] md:z-20 md:min-h-[700px] min-h-[600px] font-pixel font-bold flex flex-col">
       <div className="flex items-center py-4">
         <div className="md:h-10 md:w-10 bg-gray-200 rounded-full ring-1 ring-gray-300 flex items-center justify-center">
           <TbMedicalCrossCircle size={24} className="text-blue-500" />
