@@ -56,7 +56,7 @@ function SymptomCheckerPage() {
     if (!spokenMessagesRef.current.has(text)) {
       spokenMessagesRef.current.add(text); // Mark the message as spoken
       if (window.responsiveVoice) {
-        window.responsiveVoice.speak(text, "UK English Female", { rate: 1.2 });
+        window.responsiveVoice.speak(text, "UK English Female", { rate: 1 });
       } else {
         console.error("ResponsiveVoice is not available.");
       }
@@ -133,6 +133,7 @@ function SymptomCheckerPage() {
       speakText(errorMessage);
     }
   };
+
 
   return (
     <div className="md:max-h-[600px] md:z-20 md:min-h-[700px] min-h-[600px] font-pixel font-bold flex flex-col">
