@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { TbMedicalCrossCircle } from "react-icons/tb";
 import "../App.css";
+import { BsSoundwave } from "react-icons/bs";
+import { TbTiltShift } from "react-icons/tb";
+
 
 function SymptomCheckerPage() {
   const [messages, setMessages] = useState([
@@ -132,12 +135,12 @@ function SymptomCheckerPage() {
   };
 
   return (
-    <div className="max-h-[600px] z-20 min-h-[700px] font-pixel font-bold flex flex-col">
+    <div className="md:max-h-[600px] md:z-20 md:min-h-[700px] min-h-[400px] font-pixel font-bold flex flex-col">
       <div className="flex items-center py-4">
-        <div className="h-10 w-10 bg-gray-200 rounded-full ring-1 ring-gray-300 flex items-center justify-center">
+        <div className="md:h-10 md:w-10 bg-gray-200 rounded-full ring-1 ring-gray-300 flex items-center justify-center">
           <TbMedicalCrossCircle size={24} className="text-blue-500" />
         </div>
-        <h1 className="ml-4 text-3xl font-pixel font-bold text-gray-800">Symptom Checker Dashboard</h1>
+        <h1 className="ml-4 md:text-3xl text-2xl font-pixel font-bold text-gray-800">Symptom Checker Dashboard</h1>
       </div>
 
       <div ref={chatRef} className="flex-1 overflow-y-auto p-6 space-y-4 ring-gray-300 ring-1 rounded-3xl">
@@ -161,7 +164,8 @@ function SymptomCheckerPage() {
           onClick={startListening}
           className={`px-4 py-2 ${isListening ? "bg-gray-200 ring-gray-600 ring-2 text-gray-800" : "bg-blue-100 ring-2 ring-blue-500 text-blue-800 "}  rounded-full shadow-sm text-md`}
         >
-          {isListening ? "Listening..." : "Start Listening"}
+          {isListening ? "Listening..." : <><BsSoundwave />
+            </>}
         </button>
         <input
           type="text"
@@ -171,9 +175,9 @@ function SymptomCheckerPage() {
         />
         <button
           onClick={handleSend}
-          className="px-4 py-2 bg-blue-100 ring-2 ring-blue-500 text-blue-500 rounded-full shadow-sm text-md hover:bg-blue-600 hover:text-white focus:ring-2 focus:ring-blue-400"
+          className="px-2 py-2 bg-blue-100 ring-2 ring-blue-500 text-blue-500 rounded-full shadow-sm text-md hover:bg-blue-600 hover:text-white focus:ring-2 focus:ring-blue-400"
         >
-          Send
+          <TbTiltShift />
         </button>
       </div>
     </div>
