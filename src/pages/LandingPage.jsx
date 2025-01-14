@@ -1,6 +1,5 @@
 import React from 'react';
 import Spline from '@splinetool/react-spline';
-import { TbMedicalCrossCircle } from "react-icons/tb";
 import { Link } from 'react-router-dom';
 
 function LandingPage() {
@@ -25,7 +24,9 @@ function LandingPage() {
       </h1>
       {/* Clickable Link */}
       <Link to="/home">
-        <TbMedicalCrossCircle className=" md:mt-[500px]  animate-pulse z-50 font-aqem font-semibold translate-y-28 text-9xl mb-44 rounded-full px-4 py-2 pt-3 mt-96 cursor-pointer" />
+        <button className="font-cool md:mt-[500px] md:text-4xl bg-black text-white rounded-full hover:ring-2 hover:ring-black hover:bg-white hover:text-black  animate-pulse z-50   translate-y-28 text-2xl mb-44  px-4 py-2 mt-96 cursor-pointer">
+          Get Started
+        </button>
       </Link>
       {/* Background iframe */}
       <Spline

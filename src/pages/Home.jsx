@@ -22,18 +22,18 @@ const Home = () => {
         {/* Left Navbar - Logo and Menu Button */}
         <div className="flex items-center mt-3 relative">
           <div
-            className="ring-1 ring-gray-200 rounded-full flex font-sans font-semibold pl-1 px-3 py-1 max-w-44 cursor-pointer"
+            className="ring-2 ring-gray-200 rounded-full flex font-sans  pl-1 px-3  max-w-44 cursor-pointer"
             onClick={() => setIsDropdownVisible(!isDropdownVisible)} // Toggle dropdown
           >
-            <RiMenu5Line className="m-[5.5px] ml-[5.5px] text-3xl bg-black rounded-full p-1 text-white" />
-            <h1 className="text-lg ml-3 mt-[6px] font-semibold font-pixel">
-              SEKMED <span className="text-xs">_nova_</span>
+            <RiMenu5Line className="m-[5.5px] ml-[2.5px] text-3xl bg-zinc-900 rounded-full p-1 text-white" />
+            <h1 className="text-2xl  mt-[4px]  font-cool font-bold  text-gray-400">
+            SKMD
             </h1>
           </div>
 
           {/* Dropdown Menu */}
           {isDropdownVisible && (
-            <div className="absolute top-12 -left-2  rounded-md p-3 w-10 z-50">
+            <div className="absolute top-12 -left-[10.5px]  rounded-md p-3 w-10 z-50">
               <div className="flex flex-col gap-3">
                 <FaPlus
                   className="text-4xl bg-black ring-1 text-white ring-gray-200 rounded-full p-2 cursor-pointer"
@@ -79,9 +79,9 @@ const Home = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex items-start mx-4 mt-5">
+      <div className="flex items-start h-auto  ">
         {/* Main Content */}
-        <div className="bg-neutral-200 w-full rounded-3xl px-5">
+        <div className=" w-full rounded-3xl px-5">
           {activePage === 'vital' && <VitalPage/>}
           {activePage === 'symptom' && <SymptomCheckerPage />}
         </div>

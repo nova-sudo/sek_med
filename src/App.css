@@ -26,6 +26,22 @@
   font-family: Pixel;
   src: url(../fonts/Pixel.ttf);
 }
+@font-face{
+  font-family: coffee;
+  src: url(../fonts/coffee.otf);
+}
+@font-face{
+  font-family: cool;
+  src: url(../fonts/cool.otf);
+}
+@font-face{
+  font-family: lostar;
+  src: url(../fonts/Lostar.ttf);
+}
+@font-face{
+  font-family: mine;
+  src: url(../fonts/mine.ttf);
+}
 
 
 /* Custom scrollbar styles */

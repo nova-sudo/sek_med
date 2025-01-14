@@ -109,7 +109,7 @@ function SymptomCheckerPage() {
             setMessages((prev) => {
               const newMessages = [...prev, message];
               if (message.sender === "system") {
-                speakText(message.text);
+                // speakText(message.text);
               }
               return newMessages;
             });
@@ -136,19 +136,19 @@ function SymptomCheckerPage() {
 
 
   return (
-    <div className="md:max-h-[600px] md:z-20 md:min-h-[700px] h-screen max-h-[600px] font-pixel font-bold flex flex-col">
+    <div className="md:max-h-[600px] md:z-20 md:min-h-[700px] h-screen max-h-[600px] font-cool  flex flex-col">
       <div className="flex items-center py-4">
         <div className="md:h-10 md:w-10 bg-gray-200 rounded-full ring-1 ring-gray-300 flex items-center justify-center">
           <TbMedicalCrossCircle size={24} className="text-blue-500" />
         </div>
-        <h1 className="ml-4 md:text-3xl text-2xl font-pixel font-bold text-gray-800">Symptom Checker Dashboard</h1>
+        <h1 className="ml-4 md:text-3xl text-[20px]  font-bold text-gray-800">Symptom Checker Dashboard</h1>
       </div>
 
-      <div ref={chatRef} className="flex-1 overflow-y-auto p-6 space-y-4 ring-gray-300 ring-1 rounded-3xl">
+      <div ref={chatRef} className="flex-1 overflow-y-auto h-full p-6 space-y-4 ring-gray-300 ring-1 rounded-3xl">
         {messages.map((message) => (
           <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
             <div
-              className={`max-w-2xl py-2 px-4 rounded-3xl text-md shadow-md transition-transform duration-300 break-words ${
+              className={`max-w-2xl py-2 px-4 rounded-3xl text-md md:text-lg shadow-md transition-transform duration-300 break-words ${
                 message.sender === "user"
                   ? "bg-gray-200 ring-gray-600 ring-2 text-gray-800"
                   : "bg-blue-100 ring-2 ring-blue-500 text-blue-800"
@@ -160,10 +160,10 @@ function SymptomCheckerPage() {
         ))}
       </div>
 
-      <div className="py-4 border-gray-300 flex items-center">
+      <div className="pr-3 border-gray-300 mt-5  bg-gray-100 rounded-full ring-1 ring-gray-200 flex items-center">
         <button
           onClick={startListening}
-          className={`px-4 py-2 ${isListening ? "bg-gray-200 ring-gray-600 ring-2 text-gray-800" : "bg-blue-100 ring-2 ring-blue-500 text-blue-800 "}  rounded-full shadow-sm text-md`}
+          className={`px-3 ml-2 py-2 ${isListening ? "bg-gray-200 ring-gray-600 ring-2 text-gray-800" : "bg-blue-100 ring-2 ring-blue-500 text-blue-800 "}  rounded-full shadow-sm text-md`}
         >
           {isListening ? "Listening..." : <><BsSoundwave />
             </>}
@@ -172,7 +172,7 @@ function SymptomCheckerPage() {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="flex-1 mx-4 px-4 py-2 bg-neutral-200 ring-2 ring-gray-500 rounded-full shadow-sm text-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
+          className="flex-1 mx-2 px-4 py-2 bg-neutral-200 ring-2 ring-gray-500 rounded-full shadow-sm text-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
         />
         <button
           onClick={handleSend}

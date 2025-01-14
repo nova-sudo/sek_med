@@ -11,7 +11,11 @@ module.exports = {
         monogram: ['monogram'],
         darling:['darling'],
         pixel: ['Pixel'],
-        wild:['Wildly']
+        wild:['Wildly'],
+        coffee:['coffee'],
+        cool:['cool'],
+        lostar:['Lostar'],
+        mine:['mine'],
       },
       fontSize:{
         header:'15em'
