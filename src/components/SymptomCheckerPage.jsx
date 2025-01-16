@@ -3,6 +3,8 @@ import { TbMedicalCrossCircle } from "react-icons/tb";
 import { BsSoundwave } from "react-icons/bs";
 import { TbTiltShift } from "react-icons/tb";
 import "../App.css";
+import ReactMarkdown from "react-markdown";  // Import ReactMarkdown
+
 
 function SymptomCheckerPage() {
   const [messages, setMessages] = useState([
@@ -22,13 +24,13 @@ function SymptomCheckerPage() {
         setLoadingText((prev) =>
           prev === "." ? ".." : prev === ".." ? "..." : "."
         );
-      }, 500); // Update every 500ms
+      }, 500);
     } else {
       setLoadingText("."); // Reset when loading stops
     }
     return () => clearInterval(timer);
   }, [isLoading]);
-  
+
   useEffect(() => {
     // Initialize SpeechRecognition
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -102,6 +104,7 @@ function SymptomCheckerPage() {
       if (data.diagnoses) {
         const fullMessage = data.diagnoses;
   
+        // Streaming the message, character by character
         let currentMessage = "";
         fullMessage.split("").forEach((char, index) => {
           setTimeout(() => {
@@ -113,12 +116,13 @@ function SymptomCheckerPage() {
                   : message
               )
             );
-          }, index * 50);
+          }, index * 50); // Adjust the timing to control how fast the message appears
         });
   
+        // Add an additional message with markdown content after streaming
         setMessages((prev) => [
           ...prev,
-          { id: prev.length + 1, sender: "system", text: "" },
+          { id: prev.length + 1, sender: "system", text: fullMessage },
         ]);
       } else {
         const errorMessage =
@@ -140,28 +144,30 @@ function SymptomCheckerPage() {
     }
   };
   
+  const renderMarkdown = (text) => {
+    return <ReactMarkdown>{text}</ReactMarkdown>;
+  };
+  
 
   return (
     <div
       className="font-cool flex flex-col"
       style={{ height: "calc(100vh - 75px)" }}
     >
-      
       <div className="flex items-center py-4">
         <div className="h-10 w-10 bg-gray-200 rounded-full ring-1 ring-gray-300 flex items-center justify-center">
           <TbMedicalCrossCircle size={24} className="text-blue-500" />
         </div>
         <h1 className="ml-4 text-[20px] md:text-2xl font-bold text-gray-800">
-          Symptom Checker 
+          Symptom Checker
         </h1>
       </div>
-  
+
       {/* Chat Section */}
       <div
         ref={chatRef}
         className="flex-1 overflow-y-auto p-6 space-y-4 ring-gray-300 ring-1 rounded-3xl bg-white"
       >
-        
         {messages.map((message) => (
           <div
             key={message.id}
@@ -176,8 +182,7 @@ function SymptomCheckerPage() {
                   <TbMedicalCrossCircle size={24} className="text-blue-500 mt-[6px]" />
                 </div>
               )}
-              {/* Message content */}
-              
+              {/* Render markdown content */}
               <div
                 className={`max-w-2xl py-1 px-4 rounded-3xl text-md md:text-lg  transition-transform duration-300 break-words ${
                   message.sender === "user"
@@ -185,13 +190,13 @@ function SymptomCheckerPage() {
                     : "text-blue-800"
                 }`}
               >
-                {message.text}
+                <ReactMarkdown className="markdown">{message.text}</ReactMarkdown>
               </div>
             </div>
           </div>
         ))}
       </div>
-  
+
       {/* Input Section */}
       <div className="mt-4 bg-gray-100 rounded-full ring-1 ring-gray-200 flex items-center px-2">
         <button
@@ -219,10 +224,6 @@ function SymptomCheckerPage() {
       </div>
     </div>
   );
-  
-  
-  
-  
 }
 
 export default SymptomCheckerPage;

@@ -68,3 +68,30 @@ body {
   scrollbar-width: thin; /* Thin scrollbar */
   scrollbar-color: gray transparent; /* Thumb and track color */
 }
+
+/* Make headers stand out */
+.markdown h1 {
+  font-size: 2rem; /* Largest header */
+  font-weight: bold;
+}
+
+.markdown h2 {
+  font-size: 1.75rem; /* Medium header */
+  font-weight: bold;
+}
+
+.markdown h3 {
+  font-size: 1.5rem; /* Small header */
+  font-weight: bold;
+}
+
+/* List items */
+.markdown ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+/* Bold text */
+.markdown strong {
+  font-weight: bold;
+}
