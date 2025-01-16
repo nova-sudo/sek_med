@@ -26,7 +26,7 @@ const Home = () => {
             onClick={() => setIsDropdownVisible(!isDropdownVisible)} // Toggle dropdown
           >
             <RiMenu5Line className="m-[5.5px] ml-[2.5px] text-3xl bg-zinc-900 rounded-full p-1 text-white" />
-            <h1 className="text-2xl  mt-[4px]  font-cool font-bold  text-gray-400">
+            <h1 className="text-2xl  mt-[4px]  font-cool font-bold  text-black">
             SKMD
             </h1>
           </div>
