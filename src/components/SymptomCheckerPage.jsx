@@ -3,33 +3,25 @@ import { TbMedicalCrossCircle } from "react-icons/tb";
 import { BsSoundwave } from "react-icons/bs";
 import { TbTiltShift } from "react-icons/tb";
 import "../App.css";
-import ReactMarkdown from "react-markdown";  // Import ReactMarkdown
-
+import ReactMarkdown from "react-markdown";
 
 function SymptomCheckerPage() {
   const [messages, setMessages] = useState([
     { id: 1, sender: "system", text: "I am SEKMED. How can I assist you today?" },
   ]);
   const [input, setInput] = useState("");
+  const [sessionId, setSessionId] = useState(null); // Track the session ID
   const [isListening, setIsListening] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const chatRef = useRef(null);
   const recognitionRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [loadingText, setLoadingText] = useState(".");
 
   useEffect(() => {
-    let timer;
-    if (isLoading) {
-      timer = setInterval(() => {
-        setLoadingText((prev) =>
-          prev === "." ? ".." : prev === ".." ? "..." : "."
-        );
-      }, 500);
-    } else {
-      setLoadingText("."); // Reset when loading stops
+    // Generate a session ID on component mount if none exists
+    if (!sessionId) {
+      setSessionId(crypto.randomUUID());
     }
-    return () => clearInterval(timer);
-  }, [isLoading]);
+  }, [sessionId]);
 
   useEffect(() => {
     // Initialize SpeechRecognition
@@ -77,23 +69,22 @@ function SymptomCheckerPage() {
 
   const handleSend = async () => {
     if (input.trim() === "") return;
-  
-    setMessages((prev) => [
-      ...prev,
-      { id: prev.length + 1, sender: "user", text: input },
-    ]);
-    setInput("");
-    setIsLoading(true);
-  
+
+  setMessages((prev) => [
+    ...prev,
+    { id: prev.length + 1, sender: "user", text: input }, // Add user message
+  ]);
+  setInput("");
+  setIsLoading(true);
+
     try {
       const response = await fetch("https://symptofy.vercel.app/diagnose", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ symptoms: input }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_id: sessionId, symptoms: input, diagnoses: "" }),  // Empty diagnoses field
       });
-  
+      
+
       if (!response.ok) {
         throw new Error("Failed to get response from the server.");
       }
@@ -104,26 +95,25 @@ function SymptomCheckerPage() {
       if (data.diagnoses) {
         const fullMessage = data.diagnoses;
   
-        // Streaming the message, character by character
+        // Add a new system message for the streaming response
         let currentMessage = "";
+        setMessages((prev) => [
+          ...prev,
+          { id: prev.length + 1, sender: "system", text: "" }, // Placeholder for streaming
+        ]);
+  
         fullMessage.split("").forEach((char, index) => {
           setTimeout(() => {
             currentMessage += char;
             setMessages((prev) =>
-              prev.map((message, i) =>
-                i === prev.length - 1
+              prev.map((message) =>
+                message.id === prev.length // Update the system message with the correct ID
                   ? { ...message, text: currentMessage }
                   : message
               )
             );
           }, index * 50); // Adjust the timing to control how fast the message appears
         });
-  
-        // Add an additional message with markdown content after streaming
-        setMessages((prev) => [
-          ...prev,
-          { id: prev.length + 1, sender: "system", text: fullMessage },
-        ]);
       } else {
         const errorMessage =
           "Sorry, I couldn't understand that. Can you clarify?";
@@ -143,11 +133,6 @@ function SymptomCheckerPage() {
       ]);
     }
   };
-  
-  const renderMarkdown = (text) => {
-    return <ReactMarkdown>{text}</ReactMarkdown>;
-  };
-  
 
   return (
     <div
@@ -176,15 +161,13 @@ function SymptomCheckerPage() {
             }`}
           >
             <div className="flex items-start">
-              {/* Icon for system messages */}
               {message.sender === "system" && (
                 <div className="mr-1">
                   <TbMedicalCrossCircle size={24} className="text-blue-500 mt-[6px]" />
                 </div>
               )}
-              {/* Render markdown content */}
               <div
-                className={`max-w-2xl py-1 px-4 rounded-3xl text-md md:text-lg  transition-transform duration-300 break-words ${
+                className={`max-w-2xl py-1 px-4 rounded-3xl text-md md:text-lg transition-transform duration-300 break-words ${
                   message.sender === "user"
                     ? "bg-blue-100 ring-1 ring-blue-500 text-blue-800"
                     : "text-blue-800"
