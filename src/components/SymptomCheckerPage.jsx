@@ -144,7 +144,7 @@ function SymptomCheckerPage() {
       {/* Chat Section */}
       <div
         ref={chatRef}
-        className="flex-1 overflow-y-auto p-6 space-y-4 mt-2 ring-gray-300 ring-1 rounded-3xl bg-white"
+        className="flex-1 overflow-y-auto p-4 space-y-4 mt-2 ring-gray-300 ring-1 rounded-3xl bg-white"
       >
         {messages.map((message) => (
           <div
@@ -155,7 +155,7 @@ function SymptomCheckerPage() {
           >
             <div className="flex items-start">
               {message.sender === "system" && (
-                <div className="mr-1">
+                <div className="">
                   <TbMedicalCrossCircle size={24} className="text-blue-500 mt-[6px]" />
                 </div>
               )}
