@@ -23,11 +23,11 @@ const Home = () => {
         <div className="flex items-center mt-3 relative">
           <div
             className="ring-2 ring-gray-200 rounded-full flex font-sans  pl-1 px-3  max-w-44 cursor-pointer"
-            onClick={() => setIsDropdownVisible(!isDropdownVisible)} // Toggle dropdown
+            // onClick={() => setIsDropdownVisible(!isDropdownVisible)} // Toggle dropdown
           >
             <RiMenu5Line className="m-[5.5px] ml-[2.5px] text-3xl bg-zinc-900 rounded-full p-1 text-white" />
             <h1 className="text-2xl  mt-[4px]  font-cool font-bold  text-black">
-            SKMD
+            SEKMED
             </h1>
           </div>
 
