@@ -94,4 +94,36 @@ body {
 /* Bold text */
 .markdown strong {
   font-weight: bold;
+
+}.markdown table {
+  width: 100%;
+  border-collapse: separate; /* Allows rounded corners */
+  border-spacing: 0; /* Removes gaps between cells */
+  border: 1px solid #b0c4de; /* Light blue border for the entire table */
+  border-radius: 8px; /* Rounded corners for the table */
+  overflow: hidden; /* Ensures corners are visible */
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.markdown th, 
+.markdown td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #b0c4de; /* Light blue row separators */
+}
+
+.markdown th {
+  background-color: #063ba5; /* Steel blue for headers */
+  color: #ffffff; /* White text for headers */
+  font-size: 20px;
+  font-weight: lighter  ;
+}
+
+.markdown td {
+  background-color: #e6f0fa; /* Light blue for cells */
+}
+
+.markdown tr:last-child td {
+  border-bottom: none; /* Remove bottom border for the last row */
 }
