@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { TbMedicalCrossCircle } from "react-icons/tb";
 import { BsSoundwave } from "react-icons/bs";
 import { TbTiltShift } from "react-icons/tb";
+import { HiDownload } from "react-icons/hi";
 import "../App.css";
 import ReactMarkdown from "react-markdown";
+
 
 function SymptomCheckerPage() {
   const [messages, setMessages] = useState([
@@ -78,7 +80,7 @@ function SymptomCheckerPage() {
   setIsLoading(true);
 
     try {
-      const response = await fetch("https://symptofy.vercel.app/diagnose", {
+      const response = await fetch("http://localhost:8888/diagnose", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: sessionId, symptoms: input, diagnoses: "" }),  // Empty diagnoses field
@@ -134,6 +136,35 @@ function SymptomCheckerPage() {
     }
   };
 
+  const handleDownloadReport = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8888/report?session_id=${sessionId}`,
+        { method: "POST" }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to generate report.");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `report_${sessionId}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading report:", error);
+      alert("Could not download the report. Please try again later.");
+    }
+  };
+
+  const handleInputChange = (e) => setInput(e.target.value);
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") handleSend();
+  };
   return (
     <div
       className="font-cool flex flex-col"
@@ -142,10 +173,13 @@ function SymptomCheckerPage() {
       <div className="flex items-center ml-2 py-4">
         <div className="h-10 w-10 bg-gray-200 rounded-full ring-1 ring-gray-300 flex items-center justify-center">
           <TbMedicalCrossCircle size={24} className="text-blue-500" />
+          
         </div>
-        <h1 className="ml-4 text-[20px] md:text-2xl font-bold text-gray-800">
+        <h1 className=" mx-2 text-[20px] md:text-2xl font-bold text-gray-800">
           Symptom Checker
         </h1>
+
+        
       </div>
 
       {/* Chat Section */}
@@ -195,15 +229,23 @@ function SymptomCheckerPage() {
         <input
           type="text"
           value={input}
+          onKeyDown={handleKeyPress}
           onChange={(e) => setInput(e.target.value)}
-          className="flex-1 mx-2 px-4 py-2 bg-neutral-200 ring-2 ring-gray-500 rounded-full shadow-sm text-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
+          className="flex-1 mx-2 px-4 py-2 bg-neutral-200 ring-2 w-3/5 ring-gray-500 rounded-full shadow-sm text-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
         />
         <button
           onClick={handleSend}
+
           className="px-2 py-2 bg-blue-100 ring-2 ring-blue-500 text-blue-500 rounded-full shadow-sm hover:bg-blue-600 hover:text-white focus:ring-2 focus:ring-blue-400"
         >
           <TbTiltShift />
         </button>
+        <button onClick={handleDownloadReport}  className="px-2 py-2 ml-2 bg-blue-100 ring-2 ring-blue-500 text-blue-500 rounded-full shadow-sm hover:bg-blue-600 hover:text-white focus:ring-2 focus:ring-blue-400"
+        >
+        <HiDownload/>
+        </button>
+       
+        
       </div>
     </div>
   );
