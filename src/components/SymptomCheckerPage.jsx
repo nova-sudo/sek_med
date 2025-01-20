@@ -80,7 +80,7 @@ function SymptomCheckerPage() {
   setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8888/diagnose", {
+      const response = await fetch("https://symptofy.vercel.app/diagnose", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: sessionId, symptoms: input, diagnoses: "" }),  // Empty diagnoses field
@@ -139,7 +139,7 @@ function SymptomCheckerPage() {
   const handleDownloadReport = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8888/report?session_id=${sessionId}`,
+        `https://symptofy.vercel.app/report?session_id=${sessionId}`,
         { method: "POST" }
       );
 
