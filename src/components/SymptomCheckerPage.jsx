@@ -5,6 +5,8 @@ import { TbTiltShift } from "react-icons/tb";
 import { HiDownload } from "react-icons/hi";
 import "../App.css";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from "rehype-raw";
 
 
 function SymptomCheckerPage() {
@@ -17,6 +19,8 @@ function SymptomCheckerPage() {
   const [isLoading, setIsLoading] = useState(false);
   const chatRef = useRef(null);
   const recognitionRef = useRef(null);
+  const [showDownload, setShowDownload] = useState(false); // New state for download button visibility
+
 
   useEffect(() => {
     // Generate a session ID on component mount if none exists
@@ -60,6 +64,18 @@ function SymptomCheckerPage() {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
+  }, [messages]);
+
+  useEffect(() => {
+    // Check if any system message contains the required keywords
+    const hasRequiredKeywords = messages.some(
+      (msg) =>
+        msg.sender === "system" &&
+        msg.text.includes("Diagnoses") &&
+        msg.text.includes("Triage") &&
+        msg.text.includes("Recommended Procedure")
+    );
+    setShowDownload(hasRequiredKeywords);
   }, [messages]);
 
   const startListening = () => {
@@ -207,7 +223,7 @@ function SymptomCheckerPage() {
                     : "text-blue-800"
                 }`}
               >
-                <ReactMarkdown className="markdown">{message.text}</ReactMarkdown>
+                <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]}  rehypePlugins={[rehypeRaw]}>{message.text}</ReactMarkdown>
               </div>
             </div>
           </div>
@@ -240,10 +256,14 @@ function SymptomCheckerPage() {
         >
           <TbTiltShift />
         </button>
-        <button onClick={handleDownloadReport}  className="px-2 py-2 ml-2 bg-blue-100 ring-2 ring-blue-500 text-blue-500 rounded-full shadow-sm hover:bg-blue-600 hover:text-white focus:ring-2 focus:ring-blue-400"
-        >
-        <HiDownload/>
-        </button>
+        {showDownload && (
+          <button
+            onClick={handleDownloadReport}
+            className="px-2 py-2 ml-2 bg-blue-100 ring-2 ring-blue-500 text-blue-500 rounded-full shadow-sm hover:bg-blue-600 hover:text-white focus:ring-2 focus:ring-blue-400"
+          >
+            <HiDownload />
+          </button>
+        )}
        
         
       </div>
