@@ -14,7 +14,7 @@ const VitalPage = () => {
 
   useEffect(() => {
     // Fetch data from the backend API
-    fetch('http://localhost:8888/api/fit_vitals') // Replace with your API URL
+    fetch('https://symptofy.vercel.app/api/fit_vitals') // Replace with your API URL
       .then((response) => response.json())
       .then((data) => {
         const now = new Date();
