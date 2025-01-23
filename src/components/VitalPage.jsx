@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, Title, Tooltip, Legend, PointElement } from 'chart.js';
+import { TbMedicalCrossCircle } from "react-icons/tb";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, Title, Tooltip, Legend, PointElement);
 
@@ -18,34 +19,34 @@ const VitalPage = () => {
       .then((response) => response.json())
       .then((data) => {
         const now = new Date();
-        const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
-
-        // Filter the data for the last 24 hours
+        const twelveHoursAgo = new Date(now.getTime() - 12 * 60 * 60 * 1000); // 12 hours ago
+  
+        // Filter the data for the last 12 hours
         const filteredData = {
-          heart_rate: data.heart_rate.filter((item) => new Date(item.start_time) >= oneDayAgo),
-          step_count: data.step_count.filter((item) => new Date(item.start_time) >= oneDayAgo),
-          calories: data.calories.filter((item) => new Date(item.start_time) >= oneDayAgo),
-          distance: data.distance.filter((item) => new Date(item.start_time) >= oneDayAgo),
+          heart_rate: data.heart_rate.filter((item) => new Date(item.start_time) >= twelveHoursAgo),
+          step_count: data.step_count.filter((item) => new Date(item.start_time) >= twelveHoursAgo),
+          calories: data.calories.filter((item) => new Date(item.start_time) >= twelveHoursAgo),
+          distance: data.distance.filter((item) => new Date(item.start_time) >= twelveHoursAgo),
         };
-
+  
         setFitData(filteredData);
       })
       .catch((error) => {
         console.error('Error fetching fit data:', error);
       });
   }, []);
-
+  
   // Process data for charts
   const heartRateDataset = fitData.heart_rate.map((item) => item.value);
   const stepCountDataset = fitData.step_count.map((item) => item.value);
   const caloriesDataset = fitData.calories.map((item) => item.value);
   const distanceDataset = fitData.distance.map((item) => item.value);
-
+  
   const heartRateLabels = fitData.heart_rate.map((item) => new Date(item.start_time).toLocaleTimeString());
   const stepCountLabels = fitData.step_count.map((item) => new Date(item.start_time).toLocaleTimeString());
   const caloriesLabels = fitData.calories.map((item) => new Date(item.start_time).toLocaleTimeString());
   const distanceLabels = fitData.distance.map((item) => new Date(item.start_time).toLocaleTimeString());
-
+  
   // Bar Chart Data for Steps
   const stepsData = {
     labels: stepCountLabels,
@@ -53,9 +54,10 @@ const VitalPage = () => {
       {
         label: 'Steps',
         data: stepCountDataset,
-        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-        borderColor: 'rgba(54, 162, 235, 1)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 2,
+        borderRadius: 50,
       },
     ],
   };
@@ -70,6 +72,8 @@ const VitalPage = () => {
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 2,
+        borderRadius: 50,
+        tension: 0.4, // Adds smooth curves between points
       },
     ],
   };
@@ -81,9 +85,10 @@ const VitalPage = () => {
       {
         label: 'Calories Burnt',
         data: caloriesDataset,
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 2,
+        borderRadius: 50,
       },
     ],
   };
@@ -95,38 +100,54 @@ const VitalPage = () => {
       {
         label: 'Distance Covered (km)',
         data: distanceDataset,
-        backgroundColor: 'rgba(153, 102, 255, 0.5)',
-        borderColor: 'rgba(153, 102, 255, 1)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 2,
+        tension: 0.4, // Adds smooth curves between points
+        
       },
     ],
   };
 
   return (
-    <div>
-      <h1>Vitals Dashboard</h1>
+    <div className=" ">
+     <div className="flex items-center ml-2 py-4 ">
+             <div className="h-10 w-10  rounded-full ring-1 ring-red-500 flex items-center justify-center">
+               <TbMedicalCrossCircle size={24} className="text-red-500" />
+               
+             </div>
+             <h1 className=" mx-2 text-[20px] md:text-2xl font-cool  font-bold text-gray-800">
+               Vital Tracking
+             </h1>
+     
+             
+           </div> 
 
-      <div>
-        <h2>Steps</h2>
-        <Bar data={stepsData} />
-      </div>
+      
 
-      <div>
-        <h2>Heart Rate</h2>
-        <Line data={heartRateData} />
-      </div>
-
-      <div>
-        <h2>Calories Burnt</h2>
-        <Bar data={caloriesData} />
-      </div>
-
-      <div>
-        <h2>Distance Covered</h2>
-        <Line data={distanceData} />
+      <div className="grid grid-cols-1 bg-white rounded-3xl ring-1 ring-gray-300 sm:grid-cols-2 lg:grid-cols-2 " >
+        
+        <div className="md:h-[320px] md:w-[600px]  md:ml-16 md:pt-2">
+       
+          <Bar data={stepsData} />
+        </div>
+  
+        <div className="md:h-[320px] md:w-[600px] md:ml-16 md:pt-2">
+         
+          <Line data={heartRateData} />
+        </div>
+  
+        <div className="md:h-[320px] md:w-[600px] md:ml-16 md:pt-2">
+          <Bar data={caloriesData} />
+        </div>
+  
+        <div className="md:h-[320px] md:w-[600px] md:ml-16 md:pt-2">
+          <Line data={distanceData} />
+        </div>
       </div>
     </div>
   );
+  
 };
 
 export default VitalPage;

@@ -79,7 +79,7 @@ const Home = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex items-start h-auto  ">
+      <div className="flex items-start h-auto bg-[#fbf7f4] mt-2  ">
         {/* Main Content */}
         <div className=" w-full rounded-3xl px-5">
           {activePage === 'vital' && <VitalPage/>}
