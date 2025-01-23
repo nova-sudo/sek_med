@@ -28,20 +28,20 @@ const VitalPage = () => {
           calories: data.calories.filter((item) => new Date(item.start_time) >= twelveHoursAgo),
           distance: data.distance.filter((item) => new Date(item.start_time) >= twelveHoursAgo),
         };
-  
+
         setFitData(filteredData);
       })
       .catch((error) => {
         console.error('Error fetching fit data:', error);
       });
   }, []);
-  
+
   // Process data for charts
   const heartRateDataset = fitData.heart_rate.map((item) => item.value);
   const stepCountDataset = fitData.step_count.map((item) => item.value);
   const caloriesDataset = fitData.calories.map((item) => item.value);
   const distanceDataset = fitData.distance.map((item) => item.value);
-  
+
   const heartRateLabels = fitData.heart_rate.map((item) => new Date(item.start_time).toLocaleTimeString());
   const stepCountLabels = fitData.step_count.map((item) => new Date(item.start_time).toLocaleTimeString());
   const caloriesLabels = fitData.calories.map((item) => new Date(item.start_time).toLocaleTimeString());
@@ -147,6 +147,9 @@ const VitalPage = () => {
       </div>
     </div>
   );
+  
+  
+  
   
 };
 
