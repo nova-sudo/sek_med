@@ -187,7 +187,7 @@ function SymptomCheckerPage() {
       style={{ height: "calc(100vh - 75px)" }}
     >
       <div className="flex items-center ml-2 py-4">
-        <div className="h-10 w-10 bg-gray-200 rounded-full ring-1 ring-gray-300 flex items-center justify-center">
+        <div className="h-10 w-10  rounded-full ring-1 ring-blue-500 flex items-center justify-center">
           <TbMedicalCrossCircle size={24} className="text-blue-500" />
           
         </div>

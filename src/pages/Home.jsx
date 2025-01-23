@@ -10,7 +10,7 @@ import VitalPage from '../components/VitalPage.jsx';
 import SymptomCheckerPage from '../components/SymptomCheckerPage.jsx';
 
 const Home = () => {
-  const [isDisabled, setIsDisabled] = useState(true); // Example: Initially disabled
+  const [isDisabled, setIsDisabled] = useState(false); // Example: Initially disabled
   const [activePage, setActivePage] = useState('symptom'); // Track the current active page
   const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Track dropdown visibility
   const currentDate = new Date().toLocaleDateString(); // Current date
@@ -79,7 +79,7 @@ const Home = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex items-start h-auto  ">
+      <div className="flex items-start h-auto bg-[#fbf7f4] mt-2  ">
         {/* Main Content */}
         <div className=" w-full rounded-3xl px-5">
           {activePage === 'vital' && <VitalPage/>}
