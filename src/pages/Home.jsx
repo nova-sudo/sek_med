@@ -10,7 +10,7 @@ import VitalPage from '../components/VitalPage.jsx';
 import SymptomCheckerPage from '../components/SymptomCheckerPage.jsx';
 
 const Home = () => {
-  const [isDisabled, setIsDisabled] = useState(false); // Example: Initially disabled
+  const [isDisabled, setIsDisabled] = useState(true); // Example: Initially disabled
   const [activePage, setActivePage] = useState('symptom'); // Track the current active page
   const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Track dropdown visibility
   const currentDate = new Date().toLocaleDateString(); // Current date
