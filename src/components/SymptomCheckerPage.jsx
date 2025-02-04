@@ -183,25 +183,15 @@ function SymptomCheckerPage() {
   };
   return (
     <div
-      className="font-cool flex flex-col"
+      className="font-cool flex flex-col "
       style={{ height: "calc(100vh - 75px)" }}
     >
-      <div className="flex items-center ml-2 py-4">
-        <div className="h-10 w-10  rounded-full ring-1 ring-blue-500 flex items-center justify-center">
-          <TbMedicalCrossCircle size={24} className="text-blue-500" />
-          
-        </div>
-        <h1 className=" mx-2 text-[20px] md:text-2xl font-bold text-gray-800">
-          Symptom Checker
-        </h1>
-
-        
-      </div>
+     
 
       {/* Chat Section */}
       <div
         ref={chatRef}
-        className="flex-1 overflow-y-auto px-4 py-4 space-y-4 ring-gray-300 ring-1 rounded-3xl bg-white"
+        className="flex-1 overflow-y-auto px-4 py-2 space-y-4 ring-gray-300 ring-1 rounded-3xl   bg-white"
       >
         {messages.map((message) => (
           <div

@@ -16,7 +16,7 @@ const Home = () => {
   const currentDate = new Date().toLocaleDateString(); // Current date
 
   return (
-    <div className="h-screen bg-[#fbf7f4] custom-scrollbar flex flex-col relative">
+    <div className="h-screen bg-white custom-scrollbar flex flex-col relative">
       {/* Navbar Section */}
       <div className="flex justify-between items-center px-5">
         {/* Left Navbar - Logo and Menu Button */}
@@ -79,7 +79,7 @@ const Home = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex items-start h-auto bg-[#fbf7f4] mt-2  ">
+      <div className="flex items-start mt-2 bg-white   ">
         {/* Main Content */}
         <div className=" w-full rounded-3xl px-5">
           {activePage === 'vital' && <VitalPage/>}
