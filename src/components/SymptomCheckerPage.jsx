@@ -7,12 +7,15 @@ import "../App.css";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from "rehype-raw";
+import "./SymtomCheckerPage.css";
 
 
 function SymptomCheckerPage() {
   const [messages, setMessages] = useState([
     { id: 1, sender: "system", text: "I am SEKMED. How can I assist you today?" },
   ]);
+  
+  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
   const [input, setInput] = useState("");
   const [sessionId, setSessionId] = useState(null); // Track the session ID
   const [isListening, setIsListening] = useState(false);
@@ -87,70 +90,74 @@ function SymptomCheckerPage() {
 
   const handleSend = async () => {
     if (input.trim() === "") return;
-
-  setMessages((prev) => [
-    ...prev,
-    { id: prev.length + 1, sender: "user", text: input }, // Add user message
-  ]);
-  setInput("");
-  setIsLoading(true);
-
+  
+    setMessages((prev) => [
+      ...prev,
+      { id: prev.length + 1, sender: "user", text: input }, // Add user message
+    ]);
+    setInput("");
+  
+    if (messages.length === 1) { // Show loading screen only after the first message
+      setShowLoadingScreen(true);
+    }
+  
+    setIsLoading(true);
+  
     try {
       const response = await fetch("https://symptofy.vercel.app/diagnose", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sessionId, symptoms: input, diagnoses: "" }),  // Empty diagnoses field
+        body: JSON.stringify({ session_id: sessionId, symptoms: input, diagnoses: "" }),
       });
-      
-
+  
       if (!response.ok) {
         throw new Error("Failed to get response from the server.");
       }
   
       const data = await response.json();
       setIsLoading(false);
+      setShowLoadingScreen(false); // Hide loading screen when response starts streaming
   
       if (data.diagnoses) {
         const fullMessage = data.diagnoses;
-  
-        // Add a new system message for the streaming response
         let currentMessage = "";
+  
+        // Add placeholder system message for streaming
         setMessages((prev) => [
           ...prev,
-          { id: prev.length + 1, sender: "system", text: "" }, // Placeholder for streaming
+          { id: prev.length + 1, sender: "system", text: "" },
         ]);
   
         fullMessage.split("").forEach((char, index) => {
           setTimeout(() => {
             currentMessage += char;
             setMessages((prev) =>
-              prev.map((message) =>
-                message.id === prev.length // Update the system message with the correct ID
+              prev.map((message, i) =>
+                i === prev.length - 1 // Update only the last system message
                   ? { ...message, text: currentMessage }
                   : message
               )
             );
-          }, index * 50); // Adjust the timing to control how fast the message appears
+          }, index * 50); // Adjust speed of streaming
         });
       } else {
-        const errorMessage =
-          "Sorry, I couldn't understand that. Can you clarify?";
         setMessages((prev) => [
           ...prev,
-          { id: prev.length + 1, sender: "system", text: errorMessage },
+          { id: prev.length + 1, sender: "system", text: "Sorry, I couldn't understand that. Can you clarify?" },
         ]);
       }
     } catch (error) {
       console.error("Error during API request:", error);
       setIsLoading(false);
-      const errorMessage =
-        "Sorry, something went wrong. Please try again later.";
+      setShowLoadingScreen(false); // Hide loading screen on error
       setMessages((prev) => [
         ...prev,
-        { id: prev.length + 1, sender: "system", text: errorMessage },
+        { id: prev.length + 1, sender: "system", text: "Sorry, something went wrong. Please try again later." },
       ]);
     }
   };
+  
+  
 
   const handleDownloadReport = async () => {
     try {
@@ -181,27 +188,33 @@ function SymptomCheckerPage() {
   const handleKeyPress = (e) => {
     if (e.key === "Enter") handleSend();
   };
+  if (showLoadingScreen) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-white/30">
+        <div className="text-center w-3/4 max-w-md">
+          <p className="mb-4 text-blue-600 text-lg font-cool animate-pulse">Loading session...</p>
+          
+          {/* Progress Bar */}
+          <div className="w-full bg-gray-300 rounded-full h-1 overflow-hidden">
+            <div className="bg-blue-500 h-full progress-bar"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  
   return (
     <div
-      className="font-cool flex flex-col"
+      className="font-cool flex flex-col "
       style={{ height: "calc(100vh - 75px)" }}
     >
-      <div className="flex items-center ml-2 py-4">
-        <div className="h-10 w-10 bg-gray-200 rounded-full ring-1 ring-gray-300 flex items-center justify-center">
-          <TbMedicalCrossCircle size={24} className="text-blue-500" />
-          
-        </div>
-        <h1 className=" mx-2 text-[20px] md:text-2xl font-bold text-gray-800">
-          Symptom Checker
-        </h1>
-
-        
-      </div>
+     
 
       {/* Chat Section */}
       <div
         ref={chatRef}
-        className="flex-1 overflow-y-auto px-4 py-4 space-y-4 ring-gray-300 ring-1 rounded-3xl bg-white"
+        className="flex-1 overflow-y-auto px-4 py-2 space-y-4 ring-gray-300 ring-1 rounded-3xl   bg-white"
       >
         {messages.map((message) => (
           <div

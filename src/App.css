@@ -46,7 +46,7 @@
 
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
+  width: 0px; /* Width of the scrollbar */
 }
 
 ::-webkit-scrollbar-track {
@@ -56,7 +56,7 @@
 ::-webkit-scrollbar-thumb {
   background-color: gray; /* Scrollbar color */
   border-radius: 10px; /* Rounded corners */
-  border: 2px solid transparent; /* Adds padding for thumb */
+  border: 0px solid transparent; /* Adds padding for thumb */
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -127,3 +127,5 @@ body {
 .markdown tr:last-child td {
   border-bottom: none; /* Remove bottom border for the last row */
 }
+
+
