@@ -3,6 +3,7 @@ import { TbMedicalCrossCircle } from "react-icons/tb";
 import { BsSoundwave } from "react-icons/bs";
 import { TbTiltShift } from "react-icons/tb";
 import { HiDownload } from "react-icons/hi";
+import { TbBrandGoogleMaps } from "react-icons/tb";
 import "../App.css";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
@@ -23,14 +24,21 @@ function SymptomCheckerPage() {
   const chatRef = useRef(null);
   const recognitionRef = useRef(null);
   const [showDownload, setShowDownload] = useState(false); // New state for download button visibility
+  const [specialization, setSpecialization] = useState(null);
+  const [hasFetchedSpecialization, setHasFetchedSpecialization] = useState(false);
+  const [loadingSpec, setLoadingSpec] = useState(false);
+  
+
+
 
 
   useEffect(() => {
-    // Generate a session ID on component mount if none exists
     if (!sessionId) {
       setSessionId(crypto.randomUUID());
+      setHasFetchedSpecialization(false);
     }
   }, [sessionId]);
+  
 
   useEffect(() => {
     // Initialize SpeechRecognition
@@ -70,7 +78,6 @@ function SymptomCheckerPage() {
   }, [messages]);
 
   useEffect(() => {
-    // Check if any system message contains the required keywords
     const hasRequiredKeywords = messages.some(
       (msg) =>
         msg.sender === "system" &&
@@ -78,9 +85,15 @@ function SymptomCheckerPage() {
         msg.text.includes("Triage") &&
         msg.text.includes("Recommended Procedure")
     );
+  
     setShowDownload(hasRequiredKeywords);
-  }, [messages]);
-
+  
+    if (hasRequiredKeywords && sessionId && !hasFetchedSpecialization) {
+      fetchSpecialization(sessionId);
+      setHasFetchedSpecialization(true);
+    }
+  }, [messages, sessionId, hasFetchedSpecialization]);
+  
   const startListening = () => {
     if (recognitionRef.current && !isListening) {
       setIsListening(true);
@@ -140,6 +153,14 @@ function SymptomCheckerPage() {
             );
           }, index * 50); // Adjust speed of streaming
         });
+  
+        // Fetch specialization only once per diagnosis
+        if (data.diagnoses && !hasFetchedSpecialization) {
+          await fetchSpecialization(data.session_id);
+          setHasFetchedSpecialization(true);
+        }
+  
+        console.log(data.diagnoses);
       } else {
         setMessages((prev) => [
           ...prev,
@@ -156,6 +177,7 @@ function SymptomCheckerPage() {
       ]);
     }
   };
+  
   
   
 
@@ -203,6 +225,56 @@ function SymptomCheckerPage() {
     );
   }
   
+  const fetchSpecialization = async () => {
+    setLoadingSpec(true);
+    try {
+      const response = await fetch(`https://symptofy.vercel.app/getspec?session_id=${sessionId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) throw new Error("Failed to fetch specialization.");
+      const data = await response.json();
+      setSpecialization(data.recommended_specialization.summary);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    } finally {
+      setLoadingSpec(false);
+    }
+  };
+
+  const getLocations = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const query = specialization ? encodeURIComponent(specialization) : "medical specialist";
+          const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}&near=${latitude},${longitude}`;
+  
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: prev.length + 1,
+              sender: "system",
+              text: `Find nearby specialists: [Open Google Maps](${googleMapsUrl})`,
+            },
+          ]);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          setMessages((prev) => [
+            ...prev,
+            { id: prev.length + 1, sender: "system", text: "Unable to access location." },
+          ]);
+        }
+      );
+    } else {
+      setMessages((prev) => [
+        ...prev,
+        { id: prev.length + 1, sender: "system", text: "Geolocation is not supported by this browser." },
+      ]);
+    }
+  };
+
   
   return (
     <div
@@ -235,12 +307,26 @@ function SymptomCheckerPage() {
                     ? "bg-blue-100 ring-1 ring-blue-500 text-blue-800"
                     : "text-blue-800"
                 }`}
-              >
-                <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]}  rehypePlugins={[rehypeRaw]}>{message.text}</ReactMarkdown>
-              </div>
+              >{message.isMap ? (
+                <iframe
+                  src={message.mapUrl}
+                  width="100%"
+                  height="300"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                ></iframe>
+              ) : (
+                <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{message.text}</ReactMarkdown>
+              )}</div>
             </div>
           </div>
         ))}
+        {showDownload && (
+        <> 
+        {loadingSpec && <p className="text-center text-blue-600 mt-2 animate-pulse">Fetching specialization</p>}
+        {specialization && <p className="text-center bg-blue-100 ring-1 ring-blue-700 text-blue-700 font-bold mt-2">Recommended Specialization: {specialization}</p>}</>
+       
+      )}
       </div>
 
       {/* Input Section */}
@@ -270,15 +356,22 @@ function SymptomCheckerPage() {
           <TbTiltShift />
         </button>
         {showDownload && (
+          <>
           <button
             onClick={handleDownloadReport}
             className="px-2 py-2 ml-2 bg-blue-100 ring-2 ring-blue-500 text-blue-500 rounded-full shadow-sm hover:bg-blue-600 hover:text-white focus:ring-2 focus:ring-blue-400"
           >
             <HiDownload />
           </button>
+          <button
+            onClick={getLocations}
+            className="px-2 py-2 ml-2 bg-red-100 ring-2 ring-red-500 text-red-500 rounded-full shadow-sm hover:bg-red-600 hover:text-white focus:ring-2 focus:ring-red-400"
+          >
+            <TbBrandGoogleMaps />
+          </button>
+          
+          </>
         )}
-       
-        
       </div>
     </div>
   );
