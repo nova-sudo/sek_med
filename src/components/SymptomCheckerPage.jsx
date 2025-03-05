@@ -288,9 +288,13 @@ function SymptomCheckerPage() {
      
 
       {/* Chat Section */}
-<div
+      <div
   ref={chatRef}
-  className="flex-1 overflow-c px-4 py-2 space-y-4 bg-white w-full max-w-[800px] mx-auto"
+  className="flex-1 overflow-y-auto px-4 py-2 space-y-4 bg-white w-full max-w-[800px] mx-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent scroll-smooth"
+  style={{
+    scrollbarWidth: "thin",
+    scrollbarColor: "transparent transparent",
+  }}
 >
   {messages.map((message) => (
     <div
@@ -352,52 +356,53 @@ function SymptomCheckerPage() {
 
 
       {/* Input Section */}
-<div className="flex  items-center gap-2 p-2 border border-gray-300 bg-white rounded-2xl shadow-md w-full max-w-[800px] mb-5 mx-auto">
+      <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 p-2 border border-gray-300 bg-white rounded-2xl shadow-md w-full max-w-[800px] mb-5 mx-auto">
   {/* Voice Button */}
   <button
     onClick={startListening}
-    className={`p-2 transition-all ${
+    className={`w-10 h-10 sm:w-auto sm:h-auto p-2 transition-all ${
       isListening ? "bg-gray-200 ring-2 ring-gray-600" : "bg-gray-300"
     } rounded-full`}
   >
     <BsSoundwave className={`text-xl ${isListening ? "animate-pulse text-gray-800" : "text-gray-600"}`} />
   </button>
 
-  {/* Single-line Input */}
+  {/* Input Field (flex-1 ensures it takes available space) */}
   <input
     type="text"
     value={input}
     onChange={(e) => setInput(e.target.value)}
     placeholder="Type a message..."
-    className="flex-1 p-2 text-lg bg-transparent outline-none border-none whitespace-nowrap overflow-hidden"
+    className="min-w-0 flex-1 p-2 text-lg bg-transparent outline-none border-none"
   />
 
   {/* Send Button */}
   <button
     onClick={handleSend}
-    className="p-2 text-blue-500 transition-all bg-blue-100 rounded-full hover:bg-blue-600 hover:text-white"
+    className=" p-1 text-blue-500 transition-all bg-blue-100 rounded-full hover:bg-blue-600 hover:text-white"
   >
-    <TbTiltShift />
+    <TbTiltShift className="text-2xl " />
   </button>
 
   {/* Additional Actions */}
   {showDownload && (
     <>
-      <button
+      {/* <button
         onClick={handleDownloadReport}
-        className="p-2 text-blue-500 transition-all bg-blue-100 rounded-full hover:bg-blue-600 hover:text-white"
+        className=" p-1 text-blue-500 transition-all bg-blue-100 rounded-full hover:bg-blue-600 hover:text-white"
       >
-        <HiDownload />
-      </button>
+        <HiDownload  className="text-2xl "/>
+      </button> */}
       <button
         onClick={getLocations}
-        className="p-2 text-red-500 transition-all bg-red-100 rounded-full hover:bg-red-600 hover:text-white"
+        className="p-1 text-red-500 transition-all bg-red-100 rounded-full hover:bg-red-600 hover:text-white"
       >
-        <TbBrandGoogleMaps />
+        <TbBrandGoogleMaps  className="text-2xl "/>
       </button>
     </>
   )}
 </div>
+
 
 
 

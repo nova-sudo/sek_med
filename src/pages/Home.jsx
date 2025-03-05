@@ -80,7 +80,7 @@ const Home = () => {
       {/* Main Content Area */}
       <div className="flex items-start  bg-white   ">
         {/* Main Content */}
-        <div className=" w-full rounded-3xl px-5">
+        <div className=" w-full rounded-3xl ">
           {activePage === 'vital' && <VitalPage/>}
           {activePage === 'symptom' && <SymptomCheckerPage  />}
         </div>
