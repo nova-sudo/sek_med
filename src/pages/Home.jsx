@@ -18,15 +18,14 @@ const Home = () => {
   return (
     <div className="h-screen bg-white custom-scrollbar flex flex-col relative">
       {/* Navbar Section */}
-      <div className="flex justify-between items-center px-5">
+      <div className="flex justify-between items-center pr-2 ml-2 mb-2 -translate-y-2 pt-0">
         {/* Left Navbar - Logo and Menu Button */}
-        <div className="flex items-center mt-3 relative">
+        <div className="flex items-center relative">
           <div
-            className="ring-2 ring-gray-200 rounded-full flex font-sans  pl-1 px-3  max-w-44 cursor-pointer"
+            className="rounded-full flex font-sans    max-w-44 cursor-pointer"
             // onClick={() => setIsDropdownVisible(!isDropdownVisible)} // Toggle dropdown
           >
-            <RiMenu5Line className="m-[5.5px] ml-[2.5px] text-3xl bg-zinc-900 rounded-full p-1 text-white" />
-            <h1 className="text-2xl  mt-[4px]  font-cool font-bold  text-black">
+            <h1 className="text-3xl   font-cool font-bold m-4 text-black">
             SEKMED
             </h1>
           </div>
@@ -53,8 +52,8 @@ const Home = () => {
         </div>
 
         {/* Icons for Page Switching */}
-        <div className="flex ml-2 mt-2">
-          <div className="flex items-start justify-start ring-1 ring-gray-200 rounded-full p-[2px]">
+        <div className="flex ml-3 mt-4">
+          <div className="flex items-start justify-start ring-1 ring-gray-200 rounded-full">
             <PiBrainBold
               onClick={() => setActivePage('symptom')}
               className={`text-4xl m-1 ring-1 ring-gray-200 rounded-full p-2 cursor-pointer ${
@@ -79,11 +78,11 @@ const Home = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex items-start mt-2 bg-white   ">
+      <div className="flex items-start  bg-white   ">
         {/* Main Content */}
         <div className=" w-full rounded-3xl px-5">
           {activePage === 'vital' && <VitalPage/>}
-          {activePage === 'symptom' && <SymptomCheckerPage />}
+          {activePage === 'symptom' && <SymptomCheckerPage  />}
         </div>
       </div>
     </div>

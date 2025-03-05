@@ -81,9 +81,7 @@ function SymptomCheckerPage() {
     const hasRequiredKeywords = messages.some(
       (msg) =>
         msg.sender === "system" &&
-        msg.text.includes("Diagnoses") &&
-        msg.text.includes("Triage") &&
-        msg.text.includes("Recommended Procedure")
+        msg.text.includes("Diagnoses")
     );
   
     setShowDownload(hasRequiredKeywords);
@@ -154,13 +152,13 @@ function SymptomCheckerPage() {
           }, index * 50); // Adjust speed of streaming
         });
   
-        // Fetch specialization only once per diagnosis
-        if (data.diagnoses && !hasFetchedSpecialization) {
-          await fetchSpecialization(data.session_id);
-          setHasFetchedSpecialization(true);
-        }
+        // // Fetch specialization only once per diagnosis
+        // if (data.diagnoses && !hasFetchedSpecialization) {
+        //   await fetchSpecialization(data.session_id);
+        //   setHasFetchedSpecialization(true);
+        // // }
   
-        console.log(data.diagnoses);
+        // console.log(data.diagnoses);
       } else {
         setMessages((prev) => [
           ...prev,
@@ -207,18 +205,16 @@ function SymptomCheckerPage() {
 
   const handleInputChange = (e) => setInput(e.target.value);
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") handleSend();
-  };
+  
   if (showLoadingScreen) {
     return (
       <div className="flex items-center justify-center h-screen bg-white/30">
         <div className="text-center w-3/4 max-w-md">
-          <p className="mb-4 text-blue-600 text-lg font-cool animate-pulse">Loading session...</p>
+          <p className="mb-4 text-black text-lg font-cool animate-pulse">Loading session...</p>
           
           {/* Progress Bar */}
           <div className="w-full bg-gray-300 rounded-full h-1 overflow-hidden">
-            <div className="bg-blue-500 h-full progress-bar"></div>
+            <div className="bg-black h-full progress-bar"></div>
           </div>
         </div>
       </div>
@@ -227,12 +223,19 @@ function SymptomCheckerPage() {
   
   const fetchSpecialization = async () => {
     setLoadingSpec(true);
+    
+    // Extract diagnoses from messages
+    const diagnosisMessage = messages.find(msg => msg.sender === "system" && msg.text.includes("Diagnoses"));
+    const diagnoses = diagnosisMessage ? diagnosisMessage.text : "";
+  
     try {
       const response = await fetch(`https://symptofy.vercel.app/getspec?session_id=${sessionId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
+  
       if (!response.ok) throw new Error("Failed to fetch specialization.");
+      
       const data = await response.json();
       setSpecialization(data.recommended_specialization.summary);
     } catch (error) {
@@ -241,6 +244,7 @@ function SymptomCheckerPage() {
       setLoadingSpec(false);
     }
   };
+  
 
   const getLocations = () => {
     if (navigator.geolocation) {
@@ -255,7 +259,7 @@ function SymptomCheckerPage() {
             {
               id: prev.length + 1,
               sender: "system",
-              text: `Find nearby specialists: [Open Google Maps](${googleMapsUrl})`,
+              text: `[Open Google Maps](${googleMapsUrl})`,
             },
           ]);
         },
@@ -284,95 +288,119 @@ function SymptomCheckerPage() {
      
 
       {/* Chat Section */}
-      <div
-        ref={chatRef}
-        className="flex-1 overflow-y-auto px-4 py-2 space-y-4 ring-gray-300 ring-1 rounded-3xl   bg-white"
-      >
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${
-              message.sender === "user" ? "justify-end" : "justify-start"
-            }`}
-          >
-            <div className="flex items-start">
-              {message.sender === "system" && (
-                <div className="mr-1">
-                  <TbMedicalCrossCircle size={24} className="text-blue-500 mt-[6px]" />
-                </div>
-              )}
-              <div
-                className={`max-w-2xl py-1 px-4 rounded-3xl text-md md:text-lg transition-transform duration-300 break-words ${
-                  message.sender === "user"
-                    ? "bg-blue-100 ring-1 ring-blue-500 text-blue-800"
-                    : "text-blue-800"
-                }`}
-              >{message.isMap ? (
-                <iframe
-                  src={message.mapUrl}
-                  width="100%"
-                  height="300"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                ></iframe>
-              ) : (
-                <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{message.text}</ReactMarkdown>
-              )}</div>
-            </div>
+<div
+  ref={chatRef}
+  className="flex-1 overflow-c px-4 py-2 space-y-4 bg-white w-full max-w-[800px] mx-auto"
+>
+  {messages.map((message) => (
+    <div
+      key={message.id}
+      className={`flex ${
+        message.sender === "user" ? "justify-end" : "justify-start"
+      }`}
+    >
+      <div className="flex items-start">
+        {message.sender === "system" && (
+          <div className="mr-1">
+            <TbMedicalCrossCircle size={24} className="text-black mt-[6px]" />
           </div>
-        ))}
-        {showDownload && (
-        <> 
-        {loadingSpec && <p className="text-center text-blue-600 mt-2 animate-pulse">Fetching specialization</p>}
-        {specialization && <p className="text-center bg-blue-100 ring-1 ring-blue-700 text-blue-700 font-bold mt-2">Recommended Specialization: {specialization}</p>}</>
-       
-      )}
+        )}
+        <div
+          className={`max-w-2xl py-1 px-4 rounded-3xl text-md md:text-lg transition-transform duration-300 break-words ${
+            message.sender === "user"
+              ? "bg-gray-200 text-black"
+              : "text-black"
+          }`}
+        >
+          {message.isMap ? (
+            <iframe
+              src={message.mapUrl}
+              width="100%"
+              height="300"
+              style={{ border: 0 }}
+              allowFullScreen
+            ></iframe>
+          ) : (
+            <ReactMarkdown
+              className="markdown"
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+            >
+              {message.text}
+            </ReactMarkdown>
+          )}
+        </div>
       </div>
+    </div>
+  ))}
+
+  {showDownload && (
+    <>
+      {loadingSpec && (
+        <p className="text-center text-black mt-2 animate-pulse">
+          Fetching specialization
+        </p>
+      )}
+      {specialization && (
+        <p className="text-center rounded-full text-black font-medium mt-2">
+          Recommended Specialization: {specialization}
+        </p>
+      )}
+    </>
+  )}
+</div>
+
 
       {/* Input Section */}
-      <div className="mt-4 bg-gray-100 rounded-full ring-1 ring-gray-200 flex items-center px-2">
-        <button
-          onClick={startListening}
-          className={`px-3 py-2 ${
-            isListening
-              ? "bg-gray-200 ring-gray-600 ring-2 text-gray-800"
-              : "bg-blue-100 ring-2 ring-blue-500 text-blue-800"
-          } rounded-full shadow-sm`}
-        >
-          {isListening ? "Listening..." : <BsSoundwave />}
-        </button>
-        <input
-          type="text"
-          value={input}
-          onKeyDown={handleKeyPress}
-          onChange={(e) => setInput(e.target.value)}
-          className="flex-1 mx-2 px-4 py-2 bg-neutral-200 ring-2 w-3/5 ring-gray-500 rounded-full shadow-sm text-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
-        />
-        <button
-          onClick={handleSend}
+<div className="flex  items-center gap-2 p-2 border border-gray-300 bg-white rounded-2xl shadow-md w-full max-w-[800px] mb-5 mx-auto">
+  {/* Voice Button */}
+  <button
+    onClick={startListening}
+    className={`p-2 transition-all ${
+      isListening ? "bg-gray-200 ring-2 ring-gray-600" : "bg-gray-300"
+    } rounded-full`}
+  >
+    <BsSoundwave className={`text-xl ${isListening ? "animate-pulse text-gray-800" : "text-gray-600"}`} />
+  </button>
 
-          className="px-2 py-2 bg-blue-100 ring-2 ring-blue-500 text-blue-500 rounded-full shadow-sm hover:bg-blue-600 hover:text-white focus:ring-2 focus:ring-blue-400"
-        >
-          <TbTiltShift />
-        </button>
-        {showDownload && (
-          <>
-          <button
-            onClick={handleDownloadReport}
-            className="px-2 py-2 ml-2 bg-blue-100 ring-2 ring-blue-500 text-blue-500 rounded-full shadow-sm hover:bg-blue-600 hover:text-white focus:ring-2 focus:ring-blue-400"
-          >
-            <HiDownload />
-          </button>
-          <button
-            onClick={getLocations}
-            className="px-2 py-2 ml-2 bg-red-100 ring-2 ring-red-500 text-red-500 rounded-full shadow-sm hover:bg-red-600 hover:text-white focus:ring-2 focus:ring-red-400"
-          >
-            <TbBrandGoogleMaps />
-          </button>
-          
-          </>
-        )}
-      </div>
+  {/* Single-line Input */}
+  <input
+    type="text"
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    placeholder="Type a message..."
+    className="flex-1 p-2 text-lg bg-transparent outline-none border-none whitespace-nowrap overflow-hidden"
+  />
+
+  {/* Send Button */}
+  <button
+    onClick={handleSend}
+    className="p-2 text-blue-500 transition-all bg-blue-100 rounded-full hover:bg-blue-600 hover:text-white"
+  >
+    <TbTiltShift />
+  </button>
+
+  {/* Additional Actions */}
+  {showDownload && (
+    <>
+      <button
+        onClick={handleDownloadReport}
+        className="p-2 text-blue-500 transition-all bg-blue-100 rounded-full hover:bg-blue-600 hover:text-white"
+      >
+        <HiDownload />
+      </button>
+      <button
+        onClick={getLocations}
+        className="p-2 text-red-500 transition-all bg-red-100 rounded-full hover:bg-red-600 hover:text-white"
+      >
+        <TbBrandGoogleMaps />
+      </button>
+    </>
+  )}
+</div>
+
+
+
     </div>
   );
 }
