@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { LiaMapSolid } from "react-icons/lia";
 import { GoHistory } from "react-icons/go";
-import { AiOutlineFundView } from "react-icons/ai";
+import { AiOutlineFundView, AiOutlineUser } from "react-icons/ai";
 import { FaPlus } from "react-icons/fa6";
 import { PiBrainBold } from 'react-icons/pi';
 import { TbActivityHeartbeat } from 'react-icons/tb';
 import { RiMenu5Line } from 'react-icons/ri';
 import VitalPage from '../components/VitalPage.jsx';
 import SymptomCheckerPage from '../components/SymptomCheckerPage.jsx';
+import { Avatar } from '@mui/material';
 
 const Home = () => {
   const [isDisabled, setIsDisabled] = useState(true); // Example: Initially disabled
@@ -22,10 +23,12 @@ const Home = () => {
         {/* Left Navbar - Logo and Menu Button */}
         <div className="flex items-center relative">
           <div
-            className="rounded-full flex font-sans    max-w-44 cursor-pointer"
+            className="rounded-full flex font-sans space-x-5   cursor-pointer"
             // onClick={() => setIsDropdownVisible(!isDropdownVisible)} // Toggle dropdown
           >
-            <h1 className="text-3xl   font-cool font-bold m-4 text-black">
+            {/* <AiOutlineUser className='mt-[23px]  font-bold text-2xl'/>
+            <RiMenu5Line className='mt-[23px] font-bold text-2xl'/> */}
+            <h1 className="text-3xl   font-cool font-bold mt-[18px] text-black">
             SEKMED
             </h1>
           </div>

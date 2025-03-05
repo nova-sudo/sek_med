@@ -367,7 +367,6 @@ function SymptomCheckerPage() {
     <BsSoundwave className={`text-xl ${isListening ? "animate-pulse text-gray-800" : "text-gray-600"}`} />
   </button>
 
-  {/* Input Field (flex-1 ensures it takes available space) */}
   <input
     type="text"
     value={input}
@@ -376,7 +375,6 @@ function SymptomCheckerPage() {
     className="min-w-0 flex-1 p-2 text-lg bg-transparent outline-none border-none"
   />
 
-  {/* Send Button */}
   <button
     onClick={handleSend}
     className=" p-1 text-blue-500 transition-all bg-blue-100 rounded-full hover:bg-blue-600 hover:text-white"
@@ -384,7 +382,6 @@ function SymptomCheckerPage() {
     <TbTiltShift className="text-2xl " />
   </button>
 
-  {/* Additional Actions */}
   {showDownload && (
     <>
       {/* <button
