@@ -356,7 +356,7 @@ function SymptomCheckerPage() {
 
 
       {/* Input Section */}
-      <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 p-2 border border-gray-300 bg-white rounded-2xl shadow-md w-full max-w-[800px] mb-5 mx-auto">
+      <div className="flex flex-wrap sm:flex-nowrap   items-center  md:gap-2 md:p-2 p-4 border border-gray-300 bg-white rounded-2xl shadow-md md:w-full sm:w-full sm:mb-5 sm:mx-auot sm:max-w-[600px] min-w-[300px] md:max-w-[800px] md:mb-5 mx-auto "> 
   {/* Voice Button */}
   <button
     onClick={startListening}
@@ -364,7 +364,7 @@ function SymptomCheckerPage() {
       isListening ? "bg-gray-200 ring-2 ring-gray-600" : "bg-gray-300"
     } rounded-full`}
   >
-    <BsSoundwave className={`text-xl ${isListening ? "animate-pulse text-gray-800" : "text-gray-600"}`} />
+    <BsSoundwave className={`text-2xl ${isListening ? "animate-pulse text-gray-800" : "text-gray-600"}`} />
   </button>
 
   <input

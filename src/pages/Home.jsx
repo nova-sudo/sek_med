@@ -28,8 +28,8 @@ const Home = () => {
           >
             {/* <AiOutlineUser className='mt-[23px]  font-bold text-2xl'/>
             <RiMenu5Line className='mt-[23px] font-bold text-2xl'/> */}
-            <h1 className="text-3xl   font-cool font-bold mt-[18px] text-black">
-            SEKMED
+            <h1 className="text-3xl   font-cool font-semibold mt-[18px] text-black">
+           sekmed*
             </h1>
           </div>
 
