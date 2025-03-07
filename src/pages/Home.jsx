@@ -28,7 +28,7 @@ const Home = () => {
           >
             {/* <AiOutlineUser className='mt-[23px]  font-bold text-2xl'/>
             <RiMenu5Line className='mt-[23px] font-bold text-2xl'/> */}
-            <h1 className="text-3xl   font-cool font-semibold mt-[18px] text-black">
+            <h1 className="text-3xl   font-cool font-semibold m-[10px] text-black">
            sekmed*
             </h1>
           </div>
