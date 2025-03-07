@@ -360,11 +360,8 @@ function SymptomCheckerPage() {
   {/* Voice Button */}
   <button
     onClick={startListening}
-    className={`w-10 h-10 sm:w-auto sm:h-auto p-2 transition-all ${
-      isListening ? "bg-gray-200 ring-2 ring-gray-600" : "bg-gray-300"
-    } rounded-full`}
   >
-    <BsSoundwave className={`text-2xl ${isListening ? "animate-pulse text-gray-800" : "text-gray-600"}`} />
+    <BsSoundwave className={`text-2xl ml-1 ${isListening ? "animate-pulse text-gray-800" : "text-gray-600"}`} />
   </button>
 
   <input
@@ -394,7 +391,7 @@ function SymptomCheckerPage() {
         onClick={getLocations}
         className="p-1 text-red-500 transition-all bg-red-100 rounded-full hover:bg-red-600 hover:text-white"
       >
-        <TbBrandGoogleMaps  className="text-2xl "/>
+        <TbBrandGoogleMaps  className="text-2xl ml-1 "/>
       </button>
     </>
   )}
