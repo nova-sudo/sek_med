@@ -6,9 +6,8 @@ import { FaPlus } from "react-icons/fa6";
 import { PiBrainBold } from 'react-icons/pi';
 import { TbActivityHeartbeat } from 'react-icons/tb';
 import { RiMenu5Line } from 'react-icons/ri';
-import VitalPage from '../components/VitalPage.jsx';
-import SymptomCheckerPage from '../components/SymptomCheckerPage.jsx';
-import { Avatar } from '@mui/material';
+import VitalPage from './VitalPage.jsx';
+import SymptomCheckerPage from './SymptomCheckerPage.jsx';
 
 const Home = () => {
   const [isDisabled, setIsDisabled] = useState(true); // Example: Initially disabled
