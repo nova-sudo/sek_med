@@ -328,10 +328,11 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
   return (
     <div
       ref={chatRef}
-      className="flex-1 overflow-y-auto px-4 py-2 space-y-4 bg-white w-full max-w-[800px] mx-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent scroll-smooth"
+      className="flex-1 overflow-y-auto px-4 py-2 space-y-4 bg-white w-full max-w-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent scroll-smooth"
       style={{ scrollbarWidth: "thin", scrollbarColor: "transparent transparent" }}
     >
-      {messages.map((message) => (
+      <div className="mx-auto max-w-[800px]" >
+        {messages.map((message) => (
         <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
           <div className="flex items-start">
             {message.sender === "system" && (
@@ -346,6 +347,7 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
             >
               <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                 {message.text}
+                
               </ReactMarkdown>
             </div>
           </div>
@@ -372,6 +374,8 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
           )}
         </>
       )}
+      </div>
+      
     </div>
   );
 }

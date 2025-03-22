@@ -97,7 +97,7 @@ export default function useChat(chatRef) {
     setLoadingSpec(true);
     try {
       const data = await fetchSpec(sessionId);
-      setSpecialization(data.recommended_specialization.summary);
+      setSpecialization(data.recommended_specialization);
     } catch (error) {
       console.error("Fetch error:", error);
     } finally {
