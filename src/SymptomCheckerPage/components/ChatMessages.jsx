@@ -4,12 +4,12 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import "../../App.css";
+import {config} from "../../config";
 
 export default function ChatMessages({ messages, chatRef, showDownload, specialization, loadingSpec, showMap, mapLocation }) {
-  const GOOGLE_MAPS_API_KEY = "AIzaSyAKJ4ydlFnla47b2l0Cy6PRcw5xVKiw26Q";
   const mapRef = useRef(null);
   const infoWindowRef = useRef(null);
-
+  const GOOGLE_MAPS_API_KEY = config.GOOGLE_MAPS_API_KEY;
   const customMapStyles = [
     {
         "featureType": "all",
