@@ -114,7 +114,7 @@ body {
 }
 
 .markdown th {
-  background-color: #040404; /* Steel blue for headers */
+  background-color: #222222; /* Steel blue for headers */
   color: #ffffff; /* White text for headers */
   font-size: 20px;
   font-weight: lighter  ;

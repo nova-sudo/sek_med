@@ -1,13 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import ChatMessages from "../SymptomCheckerPage/components/ChatMessages";
 import MessageInput from "../SymptomCheckerPage/components/MessageInput";
 import LoadingScreen from "../SymptomCheckerPage/components/LoadingScreen";
 import useChat from "../SymptomCheckerPage/hooks/useChat";
 import useSpeechRecognition from "../SymptomCheckerPage/hooks/useSpeechRecognition";
-import "../SymptomCheckerPage.css";
+import "../App.css";
 
 function SymptomCheckerPage() {
   const chatRef = useRef(null);
+  const [showMap, setShowMap] = useState(false);
+  const [mapLocation, setMapLocation] = useState(null);
+
   const {
     messages,
     setMessages,
@@ -27,6 +30,18 @@ function SymptomCheckerPage() {
 
   const { isListening, startListening } = useSpeechRecognition(setInput);
 
+  const handleGetLocations = async () => {
+    try {
+      const locations = await getLocations();
+      if (locations && locations.length > 0) {
+        setMapLocation(locations[0]); // { lat, lng, specialization }
+        setShowMap(true);
+      }
+    } catch (error) {
+      console.error("Failed to get locations:", error);
+    }
+  };
+
   if (showLoadingScreen) {
     return <LoadingScreen />;
   }
@@ -39,6 +54,8 @@ function SymptomCheckerPage() {
         showDownload={showDownload}
         specialization={specialization}
         loadingSpec={loadingSpec}
+        showMap={showMap}
+        mapLocation={mapLocation}
       />
       <MessageInput
         input={input}
@@ -48,7 +65,7 @@ function SymptomCheckerPage() {
         startListening={startListening}
         showDownload={showDownload}
         handleDownloadReport={handleDownloadReport}
-        getLocations={getLocations}
+        getLocations={handleGetLocations}
       />
     </div>
   );

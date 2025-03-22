@@ -107,29 +107,33 @@ export default function useChat(chatRef) {
 
   const getLocations = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          const query = specialization ? encodeURIComponent(specialization) : "medical specialist";
-          const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}&near=${latitude},${longitude}`;
-          setMessages((prev) => [
-            ...prev,
-            { id: prev.length + 1, sender: "system", text: `[Open Google Maps](${googleMapsUrl})` },
-          ]);
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          setMessages((prev) => [
-            ...prev,
-            { id: prev.length + 1, sender: "system", text: "Unable to access location." },
-          ]);
-        }
-      );
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const locationData = {
+              lat: latitude,
+              lng: longitude,
+              specialization: specialization || "medical specialist", // Use specialization if available
+            };
+            resolve([locationData]);
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+            setMessages((prev) => [
+              ...prev,
+              { id: prev.length + 1, sender: "system", text: "Unable to access location." },
+            ]);
+            reject(error);
+          }
+        );
+      });
     } else {
       setMessages((prev) => [
         ...prev,
         { id: prev.length + 1, sender: "system", text: "Geolocation is not supported by this browser." },
       ]);
+      return Promise.resolve(null);
     }
   };
 

@@ -17,7 +17,7 @@ export default function MessageInput({
   return (
     <div className="flex flex-wrap sm:flex-nowrap items-center md:gap-2 md:p-2 p-4 border border-gray-300 bg-white rounded-2xl shadow-md md:w-full sm:w-full sm:mb-5 sm:mx-auto sm:max-w-[600px] min-w-[300px] md:max-w-[800px] md:mb-5 mx-auto">
       <button onClick={startListening}>
-        <BsSoundwave className={`text-3xl mr-2 ${isListening ? "animate-pulse text-gray-800" : "text-black"}`} />
+        <BsSoundwave className={`text-3xl mr-2 ${isListening ? "animate-pulse text-gray-800" : "text-zinc-800"}`} />
       </button>
       <input
         type="text"
