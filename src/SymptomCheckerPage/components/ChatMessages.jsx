@@ -13,22 +13,94 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
   const customMapStyles = [
     {
         "featureType": "all",
-        "elementType": "all",
+        "elementType": "geometry",
         "stylers": [
+          {
+            "color": "#2c2c2c"
+        },
             {
-                "hue": "#ff0000"
-            },
-            {
-                "saturation": -100
-            },
-            {
-                "lightness": -30
+                "visibility": "on"
             }
         ]
     },
     {
         "featureType": "all",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.country",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.province",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.locality",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.locality",
         "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#2c2c2c"
+            },
+            {
+                "weight": "2.00"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.neighborhood",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.neighborhood",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#696969"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "geometry.fill",
         "stylers": [
             {
                 "color": "#ffffff"
@@ -36,29 +108,11 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
         ]
     },
     {
-        "featureType": "all",
-        "elementType": "labels.text.stroke",
+        "featureType": "landscape.man_made",
+        "elementType": "geometry.fill",
         "stylers": [
             {
-                "color": "#353535"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#656565"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "all",
-        "stylers": [
-            {
-                "visibility": "on"
+                "visibility": "off"
             }
         ]
     },
@@ -67,64 +121,139 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
         "elementType": "geometry.fill",
         "stylers": [
             {
-                "color": "#505050"
+                "visibility": "off"
             }
         ]
     },
     {
-        "featureType": "poi",
-        "elementType": "geometry.stroke",
+        "featureType": "poi.park",
+        "elementType": "geometry.fill",
         "stylers": [
             {
-                "color": "#808080"
+                "color": "#f6f6f6"
+            },
+            {
+                "visibility": "off"
             }
         ]
     },
     {
         "featureType": "road",
-        "elementType": "geometry",
+        "elementType": "geometry.fill",
         "stylers": [
             {
-                "color": "#454545"
+                "weight": "0.50"
             }
         ]
     },
     {
-        "featureType": "transit",
-        "elementType": "labels",
+        "featureType": "road",
+        "elementType": "geometry.stroke",
         "stylers": [
             {
-                "hue": "#000000"
-            },
-            {
-                "saturation": 100
-            },
-            {
-                "lightness": -40
-            },
-            {
-                "invert_lightness": true
-            },
-            {
-                "gamma": 1.5
+                "visibility": "off"
             }
         ]
     },
     {
-        "featureType": "transit.station",
-        "elementType": "all",
+        "featureType": "road.highway",
+        "elementType": "geometry.fill",
         "stylers": [
             {
-                "visibility": "on"
+                "color": "#565656"
             },
             {
-                "saturation": "44"
+                "weight": "0.50"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "visibility": "off"
             },
             {
-                "lightness": "-28"
+                "weight": "0.01"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway.controlled_access",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "weight": "0.50"
             },
             {
-                "hue": "#ff9900"
+                "color": "#8e8e8e"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway.controlled_access",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "visibility": "off"
+            },
+            {
+                "weight": "0.50"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#b7b7b7"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "transit.line",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#404040"
+            }
+        ]
+    },
+    {
+        "featureType": "transit.line",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "visibility": "off"
             }
         ]
     },
@@ -133,73 +262,16 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
         "elementType": "geometry.fill",
         "stylers": [
             {
-                "saturation": "-6"
-            },
-            {
-                "color": "#c27c7c"
+                "visibility": "off"
             }
         ]
     },
     {
-        "featureType": "transit.station",
-        "elementType": "geometry.stroke",
+        "featureType": "water",
+        "elementType": "geometry.fill",
         "stylers": [
             {
-                "saturation": "0"
-            },
-            {
-                "lightness": "8"
-            },
-            {
-                "color": "#ae5252"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.station",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "lightness": "5"
-            },
-            {
-                "color": "#3c3c3c"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.station",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "color": "#ff9900"
-            },
-            {
-                "weight": "3.55"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.station",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "saturation": "-83"
-            },
-            {
-                "weight": "1.84"
-            },
-            {
-                "visibility": "on"
-            },
-            {
-                "gamma": "0.00"
-            },
-            {
-                "color": "#ff9900"
-            },
-            {
-                "lightness": "-6"
+                "color": "#dedede"
             }
         ]
     }
@@ -354,10 +426,11 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
         </div>
       ))}
       {showMap && mapLocation && mapLocation.lat && mapLocation.lng ? (
-        <div className="mt-4">
+        <div className="mt-4 pb-2 px-2 bg-zinc-800  rounded-3xl">
+          <h1 className="text-white text-center text-lg ">Here are the closest specialsts to you</h1>
           <div
             ref={mapRef}
-            className="rounded-2xl w-full shadow-md"
+            className="rounded-2xl w-full  shadow-md"
             style={{ height: "450px" }}
           ></div>
         </div>
