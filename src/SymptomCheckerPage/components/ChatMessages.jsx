@@ -4,6 +4,8 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import "../../App.css";
+import firstaid from "../../firstaid.png";
+import source from "../../home.png";
 import {config} from "../../config";
 
 export default function ChatMessages({ messages, chatRef, showDownload, specialization, loadingSpec, showMap, mapLocation }) {
@@ -308,9 +310,11 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
           map: map,
           title: "Your Location",
           icon: {
-            url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+            url: source,
+            scaledSize: new window.google.maps.Size(25, 25),
           },
         });
+        
 
         const directionsService = new window.google.maps.DirectionsService();
         const service = new window.google.maps.places.PlacesService(map);
@@ -334,7 +338,8 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
                   map: map,
                   title: place.name,
                   icon: {
-                    url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                    url: firstaid,
+                    scaledSize: new window.google.maps.Size(18, 20), // Adjust size as needed
                   },
                 });
 
@@ -377,17 +382,17 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
 
                       const content = `
                         <div style="font-family: Arial, sans-serif; padding: 10px; max-width: 300px; background: #fff; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-                          <h3 style="margin: 0 0 8px; font-size: 16px; color: #333;">${placeDetails.name}</h3>
-                          <p style="margin: 0 0 5px; font-size: 14px; color: #666;">${placeDetails.formatted_address || "Address not available"}</p>
+                          <h3 style="margin: 0 0 10px; font-weight: bold; font-size: 16px; color: #333;">${placeDetails.name}</h3>
+                          <p style="margin: 0 0 10px; font-size: 14px; color: #666;">${placeDetails.formatted_address || "Address not available"}</p>
                           ${placeDetails.rating ? `<p style="margin: 0 0 5px; font-size: 14px; color: #666;">Rating: ${placeDetails.rating} / 5</p>` : ""}
-                          ${placeDetails.international_phone_number ? `<p style="margin: 0 0 5px; font-size: 14px; color: #666;">Phone: <a href="tel:${placeDetails.international_phone_number}" style="color: #1a73e8; text-decoration: none;">${placeDetails.international_phone_number}</a></p>` : ""}
+                          ${placeDetails.international_phone_number ? `<p style="margin: 0 0 5px; font-size: 14px; color: #666;">Phone: <a href="tel:${placeDetails.international_phone_number}" style="color: #000000; text-decoration: none;">${placeDetails.international_phone_number}</a></p>` : ""}
                           ${placeDetails.website ? `<p style="margin: 0 0 5px; font-size: 14px;"><a href="${placeDetails.website}" target="_blank" style="color: #1a73e8; text-decoration: none;">Website</a></p>` : ""}
                           ${placeDetails.opening_hours ? `<p style="margin: 0 0 5px; font-size: 14px; color: #666;">${placeDetails.opening_hours.isOpen() ? "Open Now" : "Closed"}</p>` : ""}
                           <div style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px;">
-                            <a href="${directionsUrl}" target="_blank" style="color: #1a73e8; text-decoration: none; font-size: 14px;">Get Directions</a>
-                            <a href="${googleMapsUrl}" target="_blank" style="color: #1a73e8; text-decoration: none; font-size: 14px;">View on Google Maps</a>
-                            <a href="${shareUrl}" target="_blank" style="color: #1a73e8; text-decoration: none; font-size: 14px;">Share</a>
-                            <button onclick="alert('Location saved!')" style="background: #1a73e8; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 14px;">Save Location</button>
+                            <a href="${directionsUrl}" target="_blank" style="color: #000000; text-decoration: none; font-size: 14px;">Get Directions</a>
+                            <a href="${googleMapsUrl}" target="_blank" style="color: #000000; text-decoration: none; font-size: 14px;">View on Google Maps</a>
+                            <a href="${shareUrl}" target="_blank" style="color: #000000; text-decoration: none; font-size: 14px;">Share</a>
+                            <button onclick="alert('Location saved!')" style="background: #000000; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 14px;">Save Location</button>
                           </div>
                         </div>
                       `;
