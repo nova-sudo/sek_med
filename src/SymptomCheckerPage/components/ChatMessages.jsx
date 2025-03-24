@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { TbMedicalCrossCircle, TbBrandGoogleMaps } from "react-icons/tb"; // Import TbBrandGoogleMaps
+import { TbMedicalCrossCircle, TbBrandGoogleMaps } from "react-icons/tb";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -9,15 +9,13 @@ import {config} from "../../config";
 export default function ChatMessages({ messages, chatRef, showDownload, specialization, loadingSpec, showMap, mapLocation }) {
   const mapRef = useRef(null);
   const infoWindowRef = useRef(null);
+  const directionsRenderersRef = useRef([]); // To store DirectionsRenderer instances
   const GOOGLE_MAPS_API_KEY = config.GOOGLE_MAPS_API_KEY;
   const customMapStyles = [
     {
         "featureType": "all",
         "elementType": "geometry",
         "stylers": [
-          {
-            "color": "#2c2c2c"
-        },
             {
                 "visibility": "on"
             }
@@ -85,7 +83,7 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
         "elementType": "labels",
         "stylers": [
             {
-                "visibility": "off"
+                "visibility": "on"
             }
         ]
     },
@@ -275,8 +273,7 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
             }
         ]
     }
-]
-
+  ];
 
   useEffect(() => {
     if (showMap && mapLocation && mapLocation.lat && mapLocation.lng) {
@@ -305,8 +302,8 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
 
         infoWindowRef.current = new window.google.maps.InfoWindow();
 
-        // Add marker for user's location using TbBrandGoogleMaps icon
-        new window.google.maps.Marker({
+        // Add marker for user's location
+        const originMarker = new window.google.maps.Marker({
           position: { lat: mapLocation.lat, lng: mapLocation.lng },
           map: map,
           title: "Your Location",
@@ -315,16 +312,22 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
           },
         });
 
+        const directionsService = new window.google.maps.DirectionsService();
         const service = new window.google.maps.places.PlacesService(map);
         const querySpecialization = mapLocation.specialization || specialization || "medical specialist";
+
         service.textSearch(
           {
             query: querySpecialization,
             location: new window.google.maps.LatLng(mapLocation.lat, mapLocation.lng),
-            radius: 5000,
+            radius: 500, // 5 kilometers
           },
           (results, status) => {
             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+              // Clear previous directions renderers
+              directionsRenderersRef.current.forEach(renderer => renderer.setMap(null));
+              directionsRenderersRef.current = [];
+
               results.forEach((place) => {
                 const marker = new window.google.maps.Marker({
                   position: place.geometry.location,
@@ -334,6 +337,32 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
                     url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
                   },
                 });
+
+                // Calculate and render directions
+                directionsService.route(
+                  {
+                    origin: { lat: mapLocation.lat, lng: mapLocation.lng },
+                    destination: place.geometry.location,
+                    travelMode: window.google.maps.TravelMode.DRIVING,
+                  },
+                  (result, directionsStatus) => {
+                    if (directionsStatus === window.google.maps.DirectionsStatus.OK) {
+                      const directionsRenderer = new window.google.maps.DirectionsRenderer({
+                        map: map,
+                        directions: result,
+                        suppressMarkers: true, // Hide default markers since we have custom ones
+                        polylineOptions: {
+                          strokeColor: "#000000", // Blue color
+                          strokeWeight: 3,        // Bold line
+                          strokeOpacity: 0.8,
+                        },
+                      });
+                      directionsRenderersRef.current.push(directionsRenderer);
+                    } else {
+                      console.error("Directions request failed:", directionsStatus);
+                    }
+                  }
+                );
 
                 service.getDetails(
                   {
@@ -419,7 +448,6 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
             >
               <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                 {message.text}
-                
               </ReactMarkdown>
             </div>
           </div>
@@ -427,7 +455,7 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
       ))}
       {showMap && mapLocation && mapLocation.lat && mapLocation.lng ? (
         <div className="mt-4 pb-2 px-2 bg-zinc-800  rounded-3xl">
-          <h1 className="text-white text-center text-lg ">Here are the closest specialsts to you</h1>
+          <h1 className="text-white text-center text-lg ">Here are the closest specialists to you</h1>
           <div
             ref={mapRef}
             className="rounded-2xl w-full  shadow-md"
@@ -448,7 +476,6 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
         </>
       )}
       </div>
-      
     </div>
   );
 }
