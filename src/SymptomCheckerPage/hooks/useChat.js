@@ -36,15 +36,15 @@ export default function useChat(chatRef) {
     }
   }, [messages, sessionId, hasFetchedSpecialization]);
 
-  const handleSend = async () => {
-    if (input.trim() === "") return;
-    setMessages((prev) => [...prev, { id: prev.length + 1, sender: "user", text: input }]);
-    setInput("");
+  const handleSend = async (message = input) => {
+    if (message.trim() === "") return;
+    setMessages((prev) => [...prev, { id: prev.length + 1, sender: "user", text: message }]);
+    setInput(""); // Clear the input field
     if (messages.length === 1) setShowLoadingScreen(true);
     setIsLoading(true);
 
     try {
-      const data = await fetchDiagnosis(sessionId, input);
+      const data = await fetchDiagnosis(sessionId, message);
       setIsLoading(false);
       setShowLoadingScreen(false);
 
@@ -112,7 +112,7 @@ export default function useChat(chatRef) {
             const locationData = {
               lat: latitude,
               lng: longitude,
-              specialization: specialization || "medical specialist", // Use specialization if available
+              specialization: specialization || "medical specialist",
             };
             resolve([locationData]);
           },
