@@ -8,7 +8,7 @@ export default function useSpeechRecognition(setInput) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
-      recognition.lang = "ar-EG";
+      recognition.lang = "en-US";
       recognition.interimResults = false;
       recognition.continuous = false;
 

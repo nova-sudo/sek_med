@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchDiagnosis, fetchReport, fetchSpecialization as fetchSpec } from "../utils/api";
 
 export default function useChat(chatRef) {
-  const [messages, setMessages] = useState([
-    { id: 1, sender: "system", text: "I am SEKMED. How can I assist you today?" },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [showLoadingScreen, setShowLoadingScreen] = useState(false);
   const [input, setInput] = useState("");
   const [sessionId, setSessionId] = useState(null);
