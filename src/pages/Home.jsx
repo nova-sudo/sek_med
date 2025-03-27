@@ -21,7 +21,7 @@ const Home = () => {
 
 
   return (
-    <div className="h-screen bg-white custom-scrollbar flex flex-col relative">
+    <div className="h-screen bg-opacity-0 custom-scrollbar flex flex-col relative">
       {/* Navbar Section */}
       <div className="flex justify-between m-2 items-center pt-0">
         <div className="flex items-center relative">
@@ -67,7 +67,7 @@ const Home = () => {
       
 
       {/* Main Content Area */}
-      <div className="flex items-start  bg-white   ">
+      <div className="flex items-start    ">
         {/* Main Content */}
         <div className=" w-full rounded-3xl ">
           {activePage === 'vital' && <VitalPage/>}

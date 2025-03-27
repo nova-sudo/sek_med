@@ -10,7 +10,7 @@ function App() {
   return (
    
     <Router>
-      <div className='bg-[#fbf7f4] custom-scrollbar '>
+      <div className='bg-white custom-scrollbar  '>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/Home" element={<Home />} />

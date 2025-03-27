@@ -80,7 +80,7 @@ function SymptomCheckerPage() {
       {messages.length === 0 ? (
         <motion.div
           key="initial-view"
-          className="flex flex-col items-center font-cool justify-center h-screen bg-white"
+          className="flex flex-col items-center font-cool justify-center h-screen "
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, y: -50 }}
           transition={{ duration: 0.5 }}
