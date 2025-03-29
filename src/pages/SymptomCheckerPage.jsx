@@ -6,6 +6,7 @@ import LoadingScreen from "../SymptomCheckerPage/components/LoadingScreen";
 import useChat from "../SymptomCheckerPage/hooks/useChat";
 import useSpeechRecognition from "../SymptomCheckerPage/hooks/useSpeechRecognition";
 import "../App.css";
+import SplitText from "../TextAnimations/SplitText/SplitText";
 
 // SuggestedMessages component with animation
 const SuggestedMessages = ({ onSuggestionClick }) => {
@@ -86,12 +87,21 @@ function SymptomCheckerPage() {
           transition={{ duration: 0.5 }}
         >
           <motion.h1
-            className="text-3xl md:text-4xl text-center font-bold text-zinc-800 mb-6"
+            className="text-4xl md:text-5xl text-center font-bold text-zinc-800 mb-6"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Hello, I am Sekmed, how can I help you today?
+             <SplitText
+                text="Hello, I am Sekmed, how can I help you today?"
+                className="text-4xl md:text-5xl text-center font-bold text-zinc-800 mb-6 "
+                delay={10}
+                animationFrom={{ opacity: 0, transform: 'translate3d(0,50px,0)' }}
+                animationTo={{ opacity: 1, transform: 'translate3d(0,0,0)' }}
+                easing="easeOutCubic"
+                threshold={0.2}
+                rootMargin="-50px"
+              />
           </motion.h1>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
