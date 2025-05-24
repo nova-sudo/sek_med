@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchDiagnosis, fetchReport, fetchSpecialization as fetchSpec } from "../utils/api";
+import { useVitals } from '../../contexts/VitalsContext';
 
 export default function useChat(chatRef) {
   const [messages, setMessages] = useState([]);
@@ -11,6 +12,9 @@ export default function useChat(chatRef) {
   const [specialization, setSpecialization] = useState(null);
   const [hasFetchedSpecialization, setHasFetchedSpecialization] = useState(false);
   const [loadingSpec, setLoadingSpec] = useState(false);
+
+  // Vitals context
+  const { vitals, vitalsSent, setVitalsSent } = useVitals();
 
   useEffect(() => {
     if (!sessionId) {
@@ -38,13 +42,37 @@ export default function useChat(chatRef) {
 
   const handleSend = async (message = input) => {
     if (message.trim() === "") return;
-    setMessages((prev) => [...prev, { id: prev.length + 1, sender: "user", text: message }]);
-    setInput(""); // Clear the input field
+
+    let messageToSend = message;
+    let vitalsJustSent = false;
+
+    // Append vitals if available and not yet sent
+    if (vitals && !vitalsSent) {
+      messageToSend = `Here are my latest health vitals:\n${JSON.stringify(vitals, null, 2)}\n\n${message}`;
+      setVitalsSent(true);
+      vitalsJustSent = true;
+    }
+
+    // Show the user's message in chat UI
+    setMessages((prev) => [
+      ...prev,
+      { id: prev.length + 1, sender: "user", text: message }
+    ]);
+
+    // Show confirmation if we sent the vitals to the bot
+    // if (vitalsJustSent) {
+    //   setMessages((prev) => [
+    //     ...prev,
+    //     { id: prev.length + 2, sender: "system", text: "✅ Your latest health vitals have been sent to Sekmed for a more accurate assessment."}
+    //   ]);
+    // }
+
+    setInput("");
     if (messages.length === 1) setShowLoadingScreen(true);
     setIsLoading(true);
 
     try {
-      const data = await fetchDiagnosis(sessionId, message);
+      const data = await fetchDiagnosis(sessionId, messageToSend);
       setIsLoading(false);
       setShowLoadingScreen(false);
 

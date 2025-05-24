@@ -14,7 +14,7 @@ export default function MessageInput({
   getLocations,
 }) {
   return (
-    <div className="flex mx-2 flex-wrap sm:flex-nowrap items-center md:gap-2 md:p-2 p-4 bg-zinc-800 border border-gray-300  rounded-2xl shadow-md md:w-full sm:w-full  sm:mx-auto sm:max-w-[600px] min-w-[300px] md:max-w-[800px] ">
+    <div className="flex mx-2 flex-wrap sm:flex-nowrap items-center md:gap-2 md:p-8 p-8 bg-zinc-900 rounded-2xl shadow-md md:w-[400px] sm:max-w-[600px] sm:mx-auto  md:max-w-[900px] lg:min-w-[900px]">
       <button onClick={startListening}>
         <BsSoundwave className={`text-3xl mr-2 ${isListening ? "animate-pulse text-white" : "text-zinc-100"}`} />
       </button>
