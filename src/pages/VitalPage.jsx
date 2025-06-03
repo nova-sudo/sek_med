@@ -5,7 +5,7 @@ import {
   Title, Tooltip, Legend, PointElement,
   scales
 } from 'chart.js';
-import { FaHeartbeat, FaFire, FaWalking } from 'react-icons/fa';
+import {  FaFire, FaWalking } from 'react-icons/fa';
 import { useVitals } from '../contexts/VitalsContext'; 
 import { GiFootsteps } from "react-icons/gi";
 
@@ -14,28 +14,28 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, Title, Too
 
 const VitalPage = ({ externalToken }) => {
   const [fitData, setFitData] = useState({
-    heart_rate: [],
+
     step_count: [],
     calories: [],
     distance: [],
   });
 
   const [periods, setPeriods] = useState({
-    heart_rate: '7d',
+
     steps: '7d',
     calories: '7d',
     distance: '7d',
   });
 
   const [loading, setLoading] = useState({
-    heart_rate: false,
+
     steps: false,
     calories: false,
     distance: false,
   });
 
   const [summaries, setSummaries] = useState({
-    current_heart_rate: '--',
+
     current_steps: '--',
     current_calories: '--',
     current_distance: '--',
@@ -79,13 +79,12 @@ const VitalPage = ({ externalToken }) => {
   // Share latest vitals with Context whenever data changes
   useEffect(() => {
     if (
-      fitData.heart_rate.length > 0 ||
+ 
       fitData.step_count.length > 0 ||
       fitData.calories.length > 0 ||
       fitData.distance.length > 0
     ) {
       setVitals({
-        heart_rate: fitData.heart_rate,
         step_count: fitData.step_count,
         calories: fitData.calories,
         distance: fitData.distance,
@@ -104,10 +103,9 @@ const VitalPage = ({ externalToken }) => {
   const fetchDataForType = async (type, period) => {
     setLoading(prev => ({ ...prev, [type]: true }));
     try {
-      const baseUrl = process.env.REACT_APP_API_URL || "https://sekmed-fitbit2.vercel.app";
+      const baseUrl = process.env.REACT_APP_API_URL || "https://sekmed-fitbit2.vercel.app"; 
       const endpointMap = {
-        heart_rate: 'heart',
-        steps: 'steps',
+        steps: 'steps', 
         calories: 'calories',
         distance: 'distance',
       };
@@ -117,22 +115,7 @@ const VitalPage = ({ externalToken }) => {
       });
       const data = await response.json();
 
-      if (type === 'heart_rate') {
-        const heartData = data?.['activities-heart']?.map(item => ({
-          dateTime: item.dateTime,
-          value: item.value?.restingHeartRate || 0,
-        })) || [];
-        setFitData(prev => ({ ...prev, heart_rate: heartData }));
-        if (heartData.length > 0) {
-          const latestValue = heartData[heartData.length-1].value;
-          if (latestValue) {
-            setSummaries(prev => ({
-              ...prev,
-              current_heart_rate: latestValue.toString()
-            }));
-          }
-        }
-      } else if (type === 'steps') {
+       if (type === 'steps') {
         setFitData(prev => ({
           ...prev,
           step_count: data['activities-steps'] || []
@@ -207,18 +190,7 @@ const VitalPage = ({ externalToken }) => {
     }));
   };
 
-  // Chart data configs
-  const heartRateData = {
-    labels: extractLabels(fitData.heart_rate),
-    datasets: [{
-      label: 'Heart Rate',
-      data: extractValues(fitData.heart_rate),
-      backgroundColor: 'rgba(255, 255, 255, 1)',
-      borderColor: 'rgba(255, 255, 255, 1)',
-      borderWidth: 2,
-      tension: 0.4,
-    }],
-  };
+
 
   const stepsData = {
     labels: extractLabels(fitData.step_count),

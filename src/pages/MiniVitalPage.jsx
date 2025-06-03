@@ -5,7 +5,7 @@ import { useVitals } from '../contexts/VitalsContext';
 
 const MiniVitalPage = ({ externalToken }) => {
   const [summaries, setSummaries] = useState({
-    current_heart_rate: '--',
+
     current_steps: '--',
     current_calories: '--',
     current_distance: '--',
@@ -49,7 +49,6 @@ const MiniVitalPage = ({ externalToken }) => {
       const data = await response.json();
       if (data.summary) {
         setSummaries({
-          current_heart_rate: data.summary.restingHeartRate?.toString() || '--',
           current_steps: formatNumber(data.summary.steps || 0),
           current_calories: formatNumber(data.summary.caloriesOut || 0),
           current_distance: data.summary.distances
@@ -75,13 +74,7 @@ const MiniVitalPage = ({ externalToken }) => {
     <div className="bg-zinc-900 shadow rounded-2xl p-4 font-pixel text-white">
       <h2 className="text-lg font-bold mb-3">Vital Summary</h2>
       <div className="grid grid-cols-2 gap-4">
-        <div className="flex items-center gap-2">
-          <FaHeartbeat className="text-white" />
-          <div>
-            <div className="text-sm font-semibold">Heart Rate</div>
-            <div className="text-lg font-bold">{summaries.current_heart_rate} BPM</div>
-          </div>
-        </div>
+       
         <div className="flex items-center gap-2">
           <FaWalking className="text-white" />
           <div>
