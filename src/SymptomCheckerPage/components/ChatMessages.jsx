@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { TbMedicalCrossCircle, TbBrandGoogleMaps } from "react-icons/tb";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -6,15 +6,13 @@ import rehypeRaw from "rehype-raw";
 import "../../App.css";
 import firstaid from "../../firstaid.png";
 import source from "../../home.png";
-import { config } from "../../config";
+import {config} from "../../config";
 
-export default function ChatMessages({ messages, chatRef, showDownload, specialization, loadingSpec, showMap, mapLocation, isLoadingResponse }) {
+export default function ChatMessages({ messages, chatRef, showDownload, specialization, loadingSpec, showMap, mapLocation }) {
   const mapRef = useRef(null);
   const infoWindowRef = useRef(null);
-  const directionsRenderersRef = useRef([]);
+  const directionsRenderersRef = useRef([]); // To store DirectionsRenderer instances
   const GOOGLE_MAPS_API_KEY = config.GOOGLE_MAPS_API_KEY;
-  const [showLoading, setShowLoading] = useState(false); // State for loading indicator
-
   const customMapStyles = [
     {
         "featureType": "all",
@@ -306,6 +304,7 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
 
         infoWindowRef.current = new window.google.maps.InfoWindow();
 
+        // Add marker for user's location
         const originMarker = new window.google.maps.Marker({
           position: { lat: mapLocation.lat, lng: mapLocation.lng },
           map: map,
@@ -315,6 +314,7 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
             scaledSize: new window.google.maps.Size(25, 25),
           },
         });
+        
 
         const directionsService = new window.google.maps.DirectionsService();
         const service = new window.google.maps.places.PlacesService(map);
@@ -324,10 +324,11 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
           {
             query: querySpecialization,
             location: new window.google.maps.LatLng(mapLocation.lat, mapLocation.lng),
-            radius: 500,
+            radius: 500, // 5 kilometers
           },
           (results, status) => {
             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+              // Clear previous directions renderers
               directionsRenderersRef.current.forEach(renderer => renderer.setMap(null));
               directionsRenderersRef.current = [];
 
@@ -338,10 +339,11 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
                   title: place.name,
                   icon: {
                     url: firstaid,
-                    scaledSize: new window.google.maps.Size(18, 20),
+                    scaledSize: new window.google.maps.Size(18, 20), // Adjust size as needed
                   },
                 });
 
+                // Calculate and render directions
                 directionsService.route(
                   {
                     origin: { lat: mapLocation.lat, lng: mapLocation.lng },
@@ -353,10 +355,10 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
                       const directionsRenderer = new window.google.maps.DirectionsRenderer({
                         map: map,
                         directions: result,
-                        suppressMarkers: true,
+                        suppressMarkers: true, // Hide default markers since we have custom ones
                         polylineOptions: {
-                          strokeColor: "#000000",
-                          strokeWeight: 3,
+                          strokeColor: "#000000", // Blue color
+                          strokeWeight: 3,        // Bold line
                           strokeOpacity: 0.8,
                         },
                       });
@@ -429,93 +431,55 @@ export default function ChatMessages({ messages, chatRef, showDownload, speciali
     }
   }, [showMap, mapLocation, specialization]);
 
-  // Effect to show loading indicator after 1.5 seconds if response is still loading
-  useEffect(() => {
-    let timer;
-    if (isLoadingResponse) {
-      timer = setTimeout(() => {
-        setShowLoading(true);
-      },1500 ); // 1.5 seconds
-    } else {
-      setShowLoading(false); // Hide loading indicator when response is ready
-    }
-    return () => clearTimeout(timer); // Cleanup timer on unmount or when isLoadingResponse changes
-  }, [isLoadingResponse]);
-
   return (
     <div
       ref={chatRef}
       className="flex-1 overflow-y-auto px-4 py-2 space-y-6 bg-white w-full max-w-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent scroll-smooth"
       style={{ scrollbarWidth: "thin", scrollbarColor: "transparent transparent" }}
     >
-      <div className="mx-auto max-w-[800px]">
+      <div className="mx-auto max-w-[800px]" >
         {messages.map((message) => (
-          <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
-            <div className="flex items-start mb-5">
-              {message.sender === "system" && (
-                <div className="mr-1">
-                  <TbMedicalCrossCircle size={24} className="text-zinc-800 mt-[6px]" />
-                </div>
-              )}
-              <div
-                className={`max-w-3xl py-1 px-4 rounded-3xl text-md md:text-lg transition-transform duration-300 break-words ${
-                  message.sender === "user" ? "bg-gray-200 text-zinc-800" : "text-zinc-800"
-                }`}
-              >
-                <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                  {message.text}
-                </ReactMarkdown>
-              </div>
-            </div>
-          </div>
-        ))}
-        {showLoading && isLoadingResponse && (
-          <div className="flex justify-start">
-            <div className="flex items-start mb-5">
+        <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
+          <div className="flex items-start mb-5">
+            {message.sender === "system" && (
               <div className="mr-1">
                 <TbMedicalCrossCircle size={24} className="text-zinc-800 mt-[6px]" />
               </div>
-              <div className="max-w-3xl py-1 px-4 rounded-3xl text-md md:text-lg text-zinc-800 bg-gray-100">
-                <ul className="list-none p-0 m-0">
-                  <li className="flex items-center mb-2">
-                    <span className="w-4 h-4 mr-2 rounded-full bg-black text-white flex items-center justify-center">✓</span>
-                    Loading session
-                  </li>
-                  <li className="flex items-center mb-2">
-                    <span className="w-4 h-4 mr-2 rounded-full bg-black text-white flex items-center justify-center">✓</span>
-                    Analayzing Vitals
-                  </li>
-                  <li className="flex items-center">
-                    <span className="w-4 h-4 mr-2 rounded-full bg-gray-300 flex items-center justify-center animate-pulse">&lt;</span>
-                    Discussing the historical development of cars
-                  </li>
-                </ul>
-              </div>
+            )}
+            <div
+              className={`max-w-3xl py-1 px-4 rounded-3xl text-md md:text-lg transition-transform duration-300 break-words ${
+                message.sender === "user" ? "bg-gray-200 text-zinc-800" : "text-zinc-800"
+              }`}
+            >
+              <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                {message.text}
+              </ReactMarkdown>
             </div>
           </div>
-        )}
-        {showMap && mapLocation && mapLocation.lat && mapLocation.lng ? (
-          <div className="mt-4 pb-2 px-2 bg-zinc-800 rounded-3xl">
-            <h1 className="text-white text-center text-lg">Here are the closest specialists to you</h1>
-            <div
-              ref={mapRef}
-              className="rounded-2xl w-full shadow-md"
-              style={{ height: "450px" }}
-            ></div>
-          </div>
-        ) : showMap && (
-          <p className="text-center text-zinc-800 mt-4">Unable to load map: Invalid location data</p>
-        )}
-        {showDownload && (
-          <>
-            {loadingSpec && <p className="text-center text-zinc-800 mt-2 animate-pulse">Fetching specialization</p>}
-            {specialization && (
-              <p className="text-center rounded-full text-zinc-800 font-medium mt-2">
-                Recommended Specialization: {specialization}
-              </p>
-            )}
-          </>
-        )}
+        </div>
+      ))}
+      {showMap && mapLocation && mapLocation.lat && mapLocation.lng ? (
+        <div className="mt-4 pb-2 px-2 bg-zinc-800  rounded-3xl">
+          <h1 className="text-white text-center text-lg ">Here are the closest specialists to you</h1>
+          <div
+            ref={mapRef}
+            className="rounded-2xl w-full  shadow-md"
+            style={{ height: "450px" }}
+          ></div>
+        </div>
+      ) : showMap && (
+        <p className="text-center text-zinc-800 mt-4">Unable to load map: Invalid location data</p>
+      )}
+      {showDownload && (
+        <>
+          {loadingSpec && <p className="text-center text-zinc-800 mt-2 animate-pulse">Fetching specialization</p>}
+          {specialization && (
+            <p className="text-center rounded-full text-zinc-800 font-medium mt-2">
+              Recommended Specialization: {specialization}
+            </p>
+          )}
+        </>
+      )}
       </div>
     </div>
   );
