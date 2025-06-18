@@ -135,7 +135,8 @@ useEffect(() => {
       msg.text.includes(
         "THIS IS AN EMERGANCY, CALLING AN AMBULANCE" ||
           "THIS IS AN EMERGENCY, CALLING AN AMBULANCE" ||
-          "CALLING AN AMBULANCE"
+          "CALLING AN AMBULANCE" ||
+          "Emergency"
       )
   );
 
