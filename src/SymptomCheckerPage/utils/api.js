@@ -1,5 +1,5 @@
 export async function fetchDiagnosis(sessionId, symptoms) {
-    const response = await fetch("https://sekmed-backend.jollyhill-08250396.eastus2.azurecontainerapps.io/diagnose", {
+    const response = await fetch("https://symptofy.vercel.app/diagnose", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ session_id: sessionId, symptoms, diagnoses: "" }),
@@ -9,7 +9,7 @@ export async function fetchDiagnosis(sessionId, symptoms) {
   }
   
   export async function fetchReport(sessionId) {
-    const response = await fetch(`https://sekmed-backend.jollyhill-08250396.eastus2.azurecontainerapps.io/report?session_id=${sessionId}`, {
+    const response = await fetch(`https://symptofy.vercel.app/report?session_id=${sessionId}`, {
       method: "POST",
     });
     if (!response.ok) throw new Error("Failed to generate report.");
@@ -17,7 +17,7 @@ export async function fetchDiagnosis(sessionId, symptoms) {
   }
   
   export async function fetchSpecialization(sessionId) {
-    const response = await fetch(`https://sekmed-backend.jollyhill-08250396.eastus2.azurecontainerapps.io/getspec?session_id=${sessionId}`, {
+    const response = await fetch(`https://symptofy.vercel.app/getspec?session_id=${sessionId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });
